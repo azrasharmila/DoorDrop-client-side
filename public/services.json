@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "title": "Rapid & Standard Shipping",
+    "description": "Reliable 24–72 hour delivery across Dhaka, Chittagong, and major hubs. For urgent needs, our Dhaka express service delivers within 4–6 hours."
+   
+  },
+  {
+    "id": 2,
+    "title": "Countrywide Coverage",
+    "description": "Our logistics network spans every district, providing dependable home delivery to ensure your parcels reach any destination within 2-3 days."
+  
+  },
+  {
+    "id": 3,
+    "title": "End-to-End Fulfillment",
+    "description": "Scale your business with tailored solutions including stock management, professional packing, and dedicated after-sales support."
+   
+  },
+  {
+    "id": 4,
+    "title": "Secure Cash on Delivery",
+    "description": "Build customer trust with our 100% COD service available nationwide, ensuring both payments and products are handled with total security."
+   
+  },
+  {
+    "id": 5,
+    "title": "Enterprise Logistics",
+    "description": "Specialized B2B contracts featuring dedicated warehousing solutions and sophisticated inventory control systems for corporate growth."
+   
+  },
+  {
+    "id": 6,
+    "title": "Reverse Logistics",
+    "description": "Simplify exchanges with our return facility, allowing customers to easily send back or swap items while strengthening your brand's reliability."
+   
+  }
+]
