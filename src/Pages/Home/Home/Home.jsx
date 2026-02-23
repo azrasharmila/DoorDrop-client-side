@@ -1,9 +1,11 @@
 import React from 'react';
 import Banner from '../Banner/Banner';
-import Brands from '../Brands/Brands';
+
 import Reviews from '../Reviews/Reviews';
 import HowItWorks from '../HowItWorks/HowItWorks';
 import Services from '../services/Services';
+import Companies from '../companies/Companies';
+import Coverage from '../../Coverage/Coverage';
 const reviewsPromise = fetch('/reviews.json').then(res =>res.json());
 const servicesPromise= fetch('/services.json').then(res=>res.json());
 const Home = () => {
@@ -12,8 +14,9 @@ const Home = () => {
             <Banner></Banner>
             <HowItWorks></HowItWorks>
             <Services servicesPromise={servicesPromise}></Services>
-            <Brands></Brands>
+            <Companies></Companies>
             <Reviews reviewsPromise={reviewsPromise}></Reviews>
+            <Coverage></Coverage>
         </div>
 
     );

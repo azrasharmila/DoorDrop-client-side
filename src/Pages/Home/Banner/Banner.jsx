@@ -10,7 +10,7 @@ import { LuArrowUpRight } from "react-icons/lu";
 const Banner = () => {
   return (
     <div className="bg-[#efecec] rounded-2xl">
-      <Carousel autoPlay={false} infiniteLoop={false} interval={2000} showStatus={false} transitionTime={500} >
+      <Carousel autoPlay={true} infiniteLoop={true} interval={2000} showStatus={false} transitionTime={500} >
 
 
         {/* Slide 1 */}
