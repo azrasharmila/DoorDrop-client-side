@@ -6,6 +6,7 @@ import banner1 from "../../../assets/banner1.png";
 import banner2 from "../../../assets/banner2.png";
 import banner3 from "../../../assets/banner3.png";
 import { LuArrowUpRight } from "react-icons/lu";
+import { Link } from "react-router";
 
 const Banner = () => {
   return (
@@ -36,9 +37,12 @@ const Banner = () => {
               </div>
 
              
-              <button className="btn btn-outline border-2 border-gray-200 rounded-2xl h-10 px-8 text-md font-bold hover:bg-gray-50 hover:text-black normal-case">
+              {/* <button className="btn btn-outline border-2 border-gray-200 rounded-2xl h-10 px-8 text-md font-bold hover:bg-gray-50 hover:text-black normal-case">
                 Be a Rider
-              </button>
+              </button> */}
+              <Link 
+                className='btn btn-outline border-2 border-gray-200 rounded-2xl h-10 px-8 text-md font-bold hover:bg-gray-50 hover:text-black normal-case' 
+                to="/rider">Be a Rider</Link>
             </div>
 
           </div>
@@ -74,9 +78,9 @@ const Banner = () => {
               </div>
 
              
-              <button className="btn btn-outline border-2 border-gray-200 rounded-2xl h-10 px-8 text-md font-bold hover:bg-gray-50 hover:text-black normal-case">
-                Be a Rider
-              </button>
+               <Link 
+                className='btn btn-outline border-2 border-gray-200 rounded-2xl h-10 px-8 text-md font-bold hover:bg-gray-50 hover:text-black normal-case' 
+                to="/rider">Be a Rider</Link>
             </div>
 
           </div>
@@ -118,9 +122,9 @@ const Banner = () => {
               </div>
 
              
-              <button className="btn btn-outline border-2 border-gray-200 rounded-2xl h-10 px-8 text-md font-bold hover:bg-gray-50 hover:text-black normal-case">
-                Be a Rider
-              </button>
+               <Link 
+                className='btn btn-outline border-2 border-gray-200 rounded-2xl h-10 px-8 text-md font-bold hover:bg-gray-50 hover:text-black normal-case' 
+                to="/rider">Be a Rider</Link>
             </div>
 
           </div>
