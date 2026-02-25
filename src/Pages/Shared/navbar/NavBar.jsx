@@ -19,8 +19,11 @@ const NavBar = () => {
         </li>
         <li><NavLink to="">About Us</NavLink>
         </li>
-        <li><NavLink to="/coverage">Coverage</NavLink>
+        <li><NavLink to="/send-parcel">Send Parcel</NavLink>
         </li>
+         <li><NavLink to="/coverage">Coverage</NavLink>
+        </li>
+        
         </>
     return (
         <div className="navbar bg-base-100 shadow-sm ">
