@@ -1,38 +1,87 @@
+import { log } from 'firebase/firestore/pipelines';
 import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useLoaderData } from 'react-router';
+import Swal from 'sweetalert2';
 
 const SendParcel = () => {
 
-     const serviceCenters = useLoaderData();
+    const serviceCenters = useLoaderData();
     const regionsDuplicate = serviceCenters.map(c => c.region);
     //console.log(regionsDuplicate);
 
-     const {
+    const {
         register,
         handleSubmit,
         formState: { errors },
-          control,
+        control,
 
     } = useForm();
-    
+
 
     const regions = [...new Set(regionsDuplicate)];
-   
+
     const senderRegion = useWatch({ control, name: 'senderRegion' });
     const receiverRegion = useWatch({ control, name: 'receiverRegion' })
 
-     const districtsByRegion = (region) => {
+    const districtsByRegion = (region) => {
         const regionDistricts = serviceCenters.filter(c => c.region === region);
         const districts = regionDistricts.map(d => d.district);
         return districts;
     }
 
 
-   
+
 
     const handleSendParcel = data => {
         console.log(data);
+        const isDocument = data.parcelType === 'document';
+        const issameDistrict = data.senderDistrict === data.receiverDistrict;
+        const parcelWeight = parseFloat(data.parcelWeight)
+
+
+        let cost = 0;
+        if (isDocument) {
+            cost = issameDistrict ? 60 : 100;
+
+        }
+        else {
+            if (parcelWeight < 3) {
+                cost = issameDistrict ? 110 : 150;
+
+            }
+            else {
+                const minCharge = issameDistrict ? 110 : 150;
+                const extraWeight = parcelWeight - 3;
+                const extraCharge = issameDistrict ? extraWeight * 30 : extraWeight * 30 + 30;
+                cost = minCharge + extraCharge;
+
+
+
+            }
+        }
+        console.log('cost', cost);
+        Swal.fire({
+            title: "Are you agreeing with our cost?",
+            text: `You've to pay ${cost} BDT`,
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Agreed"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Done!",
+                    text: "Your request has been confirmed",
+                    icon: "success"
+                });
+            }
+        });
+
+
+
+
 
 
     }
@@ -70,12 +119,12 @@ const SendParcel = () => {
                         <h4 className="text-2xl font-semibold text-secondary mb-3">Sender Details</h4>
                         {/* sender name */}
                         <label className="label">Sender Name</label>
-                        <input type="text" {...register('senderName',{required:true})}
+                        <input type="text" {...register('senderName', { required: true })}
                             // defaultValue={user?.displayName}
                             className="input w-full" placeholder="Sender Name" />
-                             {errors.senderName && (
-                        <p className='text-red-500'>Name is required</p>
-                    )}
+                        {errors.senderName && (
+                            <p className='text-red-500'>Name is required</p>
+                        )}
 
                         {/* sender email */}
                         <label className="label">Sender Email</label>
@@ -84,7 +133,7 @@ const SendParcel = () => {
                             className="input w-full" placeholder="Sender Email" />
 
 
-                             {/* sender region */}
+                        {/* sender region */}
                         <fieldset className="fieldset">
                             <legend className="fieldset-legend">Sender Regions</legend>
                             <select {...register('senderRegion')} defaultValue="Pick a region" className="select">
@@ -107,7 +156,7 @@ const SendParcel = () => {
                         </fieldset>
 
 
-                            
+
                         {/* sender Address */}
                         <label className="label mt-4">Sender Address</label>
                         <input type="text" {...register('senderAddress')} className="input w-full" placeholder="Sender Address" />
@@ -136,16 +185,16 @@ const SendParcel = () => {
                     </fieldset>
 
 
-                      {/* receiver Details */}
+                    {/* receiver Details */}
                     <fieldset className="fieldset">
                         <h4 className="text-2xl font-semibold text-secondary mb-3">Receiver Details</h4>
                         {/* receiver name */}
                         <label className="label">Receiver Name</label>
-                        <input type="text" {...register('receiverName',{required:true})} className="input w-full" placeholder="Receiver Name" />
-                         {errors.senderName && (
-                        <p className='text-red-500'>Name is required</p>
-                    )}
-                        
+                        <input type="text" {...register('receiverName', { required: true })} className="input w-full" placeholder="Receiver Name" />
+                        {errors.senderName && (
+                            <p className='text-red-500'>Name is required</p>
+                        )}
+
 
                         {/* receiver email */}
                         <label className="label">Receiver Email</label>
@@ -178,7 +227,7 @@ const SendParcel = () => {
                         <label className="label mt-4">Receiver Address</label>
                         <input type="text" {...register('receiverAddress')} className="input w-full" placeholder="Receiver Address" />
 
-                         <label className="label mt-4">Reciever Mobile Number</label>
+                        <label className="label mt-4">Reciever Mobile Number</label>
 
                         <input
                             type="tel"
