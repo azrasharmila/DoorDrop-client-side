@@ -3,6 +3,8 @@ import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useLoaderData } from 'react-router';
 import Swal from 'sweetalert2';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
+import useAuth from '../../Hooks/useAuth';
 
 const SendParcel = () => {
 
@@ -17,6 +19,11 @@ const SendParcel = () => {
         control,
 
     } = useForm();
+    const {user}= useAuth();
+    console.log(user);
+    
+
+    const axiosSecure = useAxiosSecure();
 
 
     const regions = [...new Set(regionsDuplicate)];
@@ -71,11 +78,16 @@ const SendParcel = () => {
             confirmButtonText: "Agreed"
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire({
-                    title: "Done!",
-                    text: "Your request has been confirmed",
-                    icon: "success"
-                });
+
+                  axiosSecure.post('/parcels', data)
+                    .then(res => {
+                        console.log('after saving parcel', res.data);
+                    })
+                // Swal.fire({
+                //     title: "Done!",
+                //     text: "Your request has been confirmed",
+                //     icon: "success"
+               // });
             }
         });
 
@@ -120,7 +132,7 @@ const SendParcel = () => {
                         {/* sender name */}
                         <label className="label">Sender Name</label>
                         <input type="text" {...register('senderName', { required: true })}
-                            // defaultValue={user?.displayName}
+                             defaultValue={user?.displayName}
                             className="input w-full" placeholder="Sender Name" />
                         {errors.senderName && (
                             <p className='text-red-500'>Name is required</p>
@@ -129,7 +141,7 @@ const SendParcel = () => {
                         {/* sender email */}
                         <label className="label">Sender Email</label>
                         <input type="text" {...register('senderEmail')}
-                            //defaultValue={user?.email}
+                            defaultValue={user?.email}
                             className="input w-full" placeholder="Sender Email" />
 
 
