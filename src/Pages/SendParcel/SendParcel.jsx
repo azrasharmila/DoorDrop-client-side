@@ -1,7 +1,7 @@
 import { log } from 'firebase/firestore/pipelines';
 import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import { useLoaderData } from 'react-router';
+import { useLoaderData, useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import useAuth from '../../Hooks/useAuth';
@@ -19,11 +19,12 @@ const SendParcel = () => {
         control,
 
     } = useForm();
-    const {user}= useAuth();
+    const { user } = useAuth();
     console.log(user);
-    
+
 
     const axiosSecure = useAxiosSecure();
+    const navigate = useNavigate();
 
 
     const regions = [...new Set(regionsDuplicate)];
@@ -68,7 +69,7 @@ const SendParcel = () => {
             }
         }
         console.log('cost', cost);
-        data.cost= cost;
+        data.cost = cost;
         Swal.fire({
             title: "Are you agreeing with our cost?",
             text: `You've to pay ${cost} BDT`,
@@ -76,19 +77,26 @@ const SendParcel = () => {
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Agreed"
+            confirmButtonText: "Agreed. Proceed to payment."
         }).then((result) => {
             if (result.isConfirmed) {
 
-                  axiosSecure.post('/parcels', data)
+                axiosSecure.post('/parcels', data)
                     .then(res => {
                         console.log('after saving parcel', res.data);
+                        if (res.data.insertedId) {
+                            navigate('/dashboard/my-parcels')
+                            Swal.fire({
+                                position: "center",
+                                icon: "success",
+                                title: "Your parcel has created. please pay!",
+                                showConfirmButton: false,
+                                timer: 2500
+                            });
+
+                        }
                     })
-                // Swal.fire({
-                //     title: "Done!",
-                //     text: "Your request has been confirmed",
-                //     icon: "success"
-               // });
+
             }
         });
 
@@ -133,7 +141,7 @@ const SendParcel = () => {
                         {/* sender name */}
                         <label className="label">Sender Name</label>
                         <input type="text" {...register('senderName', { required: true })}
-                             defaultValue={user?.displayName}
+                            defaultValue={user?.displayName}
                             className="input w-full" placeholder="Sender Name" />
                         {errors.senderName && (
                             <p className='text-red-500'>Name is required</p>

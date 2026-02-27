@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { FiEdit } from 'react-icons/fi';
 import { FaMagnifyingGlass, FaTrashCan } from 'react-icons/fa6';
 import Swal from 'sweetalert2';
+import { Link } from 'react-router';
 
 const MyParcels = () => {
 
@@ -55,6 +56,19 @@ const MyParcels = () => {
         });
 
     }
+
+    const handlePayment =async (parcel)=>{
+        const paymentInfo ={
+            cost: parcel.cost,
+            parcelId: parcel._id,
+            senderEmail: parcel.senderEmail,
+            parcelName: parcel.parcelName
+        }
+        const res = await axiosSecure.post('/payment-checkout-session',paymentInfo);
+        window.location.assign(res.data.url);
+        
+
+    }
     return (
         <div>
             <h2>All of my parcels : {parcels.length}</h2>
@@ -77,6 +91,18 @@ const MyParcels = () => {
                                 <th>{index + 1}</th>
                                 <td>{parcel.parcelName}</td>
                                 <td>{parcel.cost}</td>
+                                <td>
+           
+                                     {
+                                        parcel.paymentStatus === 'paid' ?
+                                            <span className='text-secondary'>Paid</span>
+                                            :
+
+                                                <button onClick={()=>handlePayment(parcel)} className='btn btn-sm btn-primary text-black'>Pay</button>
+                                            
+
+                                    }
+                                </td>
                                
                                 <td>{parcel.deliveryStatus}</td>
                                 <td>
