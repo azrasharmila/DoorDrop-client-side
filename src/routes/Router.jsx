@@ -34,12 +34,13 @@ export const router = createBrowserRouter([
       },
       {
         path: 'rider',
-        element: <PrivateRoute><Rider></Rider></PrivateRoute>
+        element: <PrivateRoute><Rider></Rider></PrivateRoute>,
+        loader: () => fetch('/serviceCenters.json').then(res => res.json())
       },
       {
         path: 'send-parcel',
         element: <PrivateRoute><SendParcel></SendParcel></PrivateRoute>,
-         loader: () => fetch('/serviceCenters.json').then(res => res.json())
+        loader: () => fetch('/serviceCenters.json').then(res => res.json())
       }
 
     ]
@@ -58,35 +59,35 @@ export const router = createBrowserRouter([
       }
     ]
   },
-   {
+  {
     path: '/dashboard',
-    element: 
+    element:
       <PrivateRoute>
         <DashboardLayout />
       </PrivateRoute>
     ,
     children: [
       {
-        path: 'my-parcels', 
+        path: 'my-parcels',
         Component: MyParcels
       },
       {
         path: 'payment/:parcelId',
         Component: Payment
-      }, 
+      },
       {
         path: 'payment-success',
         Component: PaymentSuccess
-      }, 
+      },
       {
-        path: 'payment-cancelled', 
+        path: 'payment-cancelled',
         Component: PaymentCancelled
       },
       {
-        path:'payment-history',
+        path: 'payment-history',
         Component: PaymentHistory
       }
-     
+
     ],
   },
 
