@@ -6,13 +6,14 @@ import { FiEdit } from 'react-icons/fi';
 import { FaMagnifyingGlass, FaTrashCan } from 'react-icons/fa6';
 import Swal from 'sweetalert2';
 import { Link } from 'react-router';
+import StatusCard from '../../../Components/StatusCard/StatusCard';
 
 const MyParcels = () => {
 
-    const{user} = useAuth();
+    const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
 
-      const { data: parcels = [] ,refetch} = useQuery({
+    const { data: parcels = [], refetch } = useQuery({
         queryKey: ['myParcels', user?.email],
         queryFn: async () => {
             const res = await axiosSecure.get(`/parcels?email=${user.email}`);
@@ -20,7 +21,17 @@ const MyParcels = () => {
         }
     })
 
-     const handleParcelDelete = id => {
+    const totalParcels = parcels.length;
+
+    const paidParcels = parcels.filter(
+        parcel => parcel.paymentStatus === "paid"
+    ).length;
+
+    const unpaidParcels = parcels.filter(
+        parcel => parcel.paymentStatus !== "paid"
+    ).length;
+
+    const handleParcelDelete = id => {
         console.log(id);
 
         Swal.fire({
@@ -39,7 +50,7 @@ const MyParcels = () => {
                         console.log(res.data);
 
                         if (res.data.deletedCount) {
-                           
+
                             refetch();
 
                             Swal.fire({
@@ -57,21 +68,39 @@ const MyParcels = () => {
 
     }
 
-    const handlePayment =async (parcel)=>{
-        const paymentInfo ={
+    const handlePayment = async (parcel) => {
+        const paymentInfo = {
             cost: parcel.cost,
             parcelId: parcel._id,
             senderEmail: parcel.senderEmail,
             parcelName: parcel.parcelName
         }
-        const res = await axiosSecure.post('/payment-checkout-session',paymentInfo);
+        const res = await axiosSecure.post('/payment-checkout-session', paymentInfo);
         window.location.assign(res.data.url);
-        
+
 
     }
     return (
         <div>
-            <h2>All of my parcels : {parcels.length}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+
+                <StatusCard
+                    title="Total Parcels"
+                    value={totalParcels}
+                />
+
+                <StatusCard
+                    title="Paid Parcels"
+                    value={paidParcels}
+                />
+
+                <StatusCard
+                    title="Unpaid Parcels"
+                    value={unpaidParcels}
+                />
+
+            </div>
+            
             <div className="overflow-x-auto">
                 <table className="table table-zebra">
                     {/* head */}
@@ -92,18 +121,18 @@ const MyParcels = () => {
                                 <td>{parcel.parcelName}</td>
                                 <td>{parcel.cost}</td>
                                 <td>
-           
-                                     {
+
+                                    {
                                         parcel.paymentStatus === 'paid' ?
                                             <span className='text-secondary'>Paid</span>
                                             :
 
-                                                <button onClick={()=>handlePayment(parcel)} className='btn btn-sm btn-primary text-black'>Pay</button>
-                                            
+                                            <button onClick={() => handlePayment(parcel)} className='btn btn-sm btn-primary text-black'>Pay</button>
+
 
                                     }
                                 </td>
-                               
+
                                 <td>{parcel.deliveryStatus}</td>
                                 <td>
                                     <button className='btn btn-square hover:bg-primary'>

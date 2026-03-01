@@ -5,6 +5,7 @@ import { FaUserCheck } from 'react-icons/fa';
 import { RiDeleteBack2Fill } from "react-icons/ri";
 import Swal from 'sweetalert2';
 import { FaTrashCan } from 'react-icons/fa6';
+import StatusCard from '../../../Components/StatusCard/StatusCard';
 
 const ApproveRiders = () => {
     const axiosSecure = useAxiosSecure();
@@ -17,9 +18,19 @@ const ApproveRiders = () => {
         }
     })
 
-    const updateRiderStatus = (id, status) => {
-        const updateInfo = { status: status }
-        axiosSecure.patch(`/riders/${id}`, updateInfo)
+    const totalRiders = riders.length;
+
+    const approvedRiders = riders.filter(
+        rider => rider.status === "approved"
+    ).length;
+
+    const rejectedRiders = riders.filter(
+        rider => rider.status === "Rejected"
+    ).length;
+
+    const updateRiderStatus = (rider, status) => {
+        const updateInfo = { status: status, email:rider.email }
+        axiosSecure.patch(`/riders/${rider._id}`, updateInfo)
             .then(res => {
                 if (res.data.modifiedCount) {
                     refetch();
@@ -35,13 +46,13 @@ const ApproveRiders = () => {
 
     }
 
-    const handleApproval = (id) => {
-        updateRiderStatus(id, 'approved');
+    const handleApproval = (rider) => {
+        updateRiderStatus(rider, 'approved');
 
     }
 
-    const handleReject = (id) => {
-        updateRiderStatus(id, 'Rejected');
+    const handleReject = (rider) => {
+        updateRiderStatus(rider, 'Rejected');
 
     }
 
@@ -85,7 +96,27 @@ const ApproveRiders = () => {
 
     return (
         <div>
-            <h2>riders pending:{riders.length}</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+
+                <StatusCard
+                    title="Total Riders"
+                    value={totalRiders}
+                />
+
+                <StatusCard
+                    title="Apporoved Riders"
+                    value={approvedRiders}
+                />
+
+                <StatusCard
+                    title="Rejected Riders"
+                    value={rejectedRiders}
+                />
+
+            </div>
+
+            
             <div className="overflow-x-auto">
                 <table className="table table-zebra">
                     {/* head */}
@@ -115,7 +146,7 @@ const ApproveRiders = () => {
 
 
                                     <div className="tooltip tooltip-top" data-tip="Approve Rider">
-                                        <button onClick={() => handleApproval(rider._id)}
+                                        <button onClick={() => handleApproval(rider)}
                                             className='btn btn-square hover:bg-secondary'>
                                             <FaUserCheck />
                                         </button>
@@ -124,7 +155,7 @@ const ApproveRiders = () => {
 
 
                                     <div className="tooltip tooltip-top" data-tip="Reject Rider">
-                                        <button onClick={() => handleReject(rider._id)}
+                                        <button onClick={() => handleReject(rider)}
 
                                             className='btn btn-square hover:bg-primary'>
                                             <RiDeleteBack2Fill />
