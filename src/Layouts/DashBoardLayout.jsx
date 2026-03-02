@@ -1,7 +1,7 @@
 import React from 'react';
 import { CiDeliveryTruck } from 'react-icons/ci';
 import { FaRegCreditCard, FaUsers } from "react-icons/fa";
-import { MdOutlineDirectionsBike } from 'react-icons/md';
+import { MdAssignmentAdd, MdOutlineDirectionsBike } from 'react-icons/md';
 import { Link, NavLink, Outlet } from 'react-router';
 import useRole from '../Hooks/useRole';
 
@@ -72,6 +72,16 @@ const DashboardLayout = () => {
                                     } data-tip="Approve Riders " to="/dashboard/approve-riders">
                                         <MdOutlineDirectionsBike className='text-primary'/>
                                         <span className="is-drawer-close:hidden">Approve Riders</span>
+                                    </NavLink>
+                                </li>
+
+                                 <li className='mb-3'>
+                                    <NavLink className={({ isActive }) =>
+                                        `is-drawer-close:tooltip is-drawer-close:tooltip-right flex items-center gap-2
+                                 ${isActive ? " text-secondary text-lg bg-accent/10" : ""}`
+                                    } data-tip="Assign Riders " to="/dashboard/assign-riders">
+                                        <MdAssignmentAdd className='text-primary'/>
+                                        <span className="is-drawer-close:hidden">Assign Riders</span>
                                     </NavLink>
                                 </li>
 
