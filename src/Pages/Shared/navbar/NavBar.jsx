@@ -4,7 +4,7 @@ import Logo from '../../../Components/Logo/Logo';
 import useAuth from '../../../Hooks/useAuth';
 
 const NavBar = () => {
-     const { user, logOut } = useAuth();
+    const { user, logOut } = useAuth();
 
     const handleLogOut = () => {
         logOut()
@@ -15,22 +15,30 @@ const NavBar = () => {
     }
 
     const links = <>
-        <li><NavLink to="">Services</NavLink>
+        <li><NavLink to="" className={({ isActive }) =>
+            isActive ? "text-primary" : ""
+        }>Home</NavLink>
         </li>
-        <li><NavLink to="">About Us</NavLink>
+        <li><NavLink to="/services" className={({ isActive }) =>
+            isActive ? "text-primary" : ""
+        }>Services</NavLink>
         </li>
-        <li><NavLink to="/send-parcel">Send Parcel</NavLink>
+        <li><NavLink to="/send-parcel" className={({ isActive }) =>
+            isActive ? "text-primary" : ""
+        }>Send Parcel</NavLink>
         </li>
-         <li><NavLink to="/coverage">Coverage</NavLink>
+        <li><NavLink to="/coverage" className={({ isActive }) =>
+            isActive ? "text-primary" : ""
+        }>Coverage</NavLink>
         </li>
 
-          {
+        {
             user && <>
                 <li><NavLink to="/dashboard/my-parcels">My Parcels</NavLink></li>
             </>
         }
-        
-        </>
+
+    </>
     return (
         <div className="navbar bg-base-100 shadow-sm ">
             <div className="navbar-start">
@@ -54,12 +62,12 @@ const NavBar = () => {
                 </ul>
             </div>
             <div className="navbar-end">
-                 {
+                {
                     user ?
                         <a onClick={handleLogOut} className="btn">Log Out</a>
                         : <Link className='btn' to="/login">Log in</Link>
                 }
-                
+
             </div>
         </div>
     );

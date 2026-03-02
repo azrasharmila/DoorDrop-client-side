@@ -17,6 +17,7 @@ import PaymentHistory from "../Pages/Dashboard/PaymentHistory/PaymentHistory";
 import ApproveRiders from "../Pages/Dashboard/ApproveRiders/approveRiders";
 import UsersManagement from "../Pages/Dashboard/UsersManagement/UsersManagement";
 import AdminRoute from "./AdminRoute";
+import Services from "../Pages/Home/services/Services";
 
 
 
@@ -34,6 +35,11 @@ export const router = createBrowserRouter([
         path: 'coverage',
         Component: Coverage,
         loader: () => fetch('/serviceCenters.json').then(res => res.json())
+      },
+      {
+        path: 'services',
+        Component: Services,
+        loader: () => fetch('/services.json').then(res => res.json())
       },
       {
         path: 'rider',

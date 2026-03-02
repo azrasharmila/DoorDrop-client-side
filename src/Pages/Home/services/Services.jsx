@@ -1,7 +1,14 @@
-import React, { use } from 'react';
 
-const Services = ({ servicesPromise }) => {
-    const services = use(servicesPromise);
+import { useEffect, useState } from 'react';
+
+const Services = () => {
+    const [services, setServices] = useState([]);
+    useEffect(() => {
+        fetch('/services.json')
+            .then((res) => res.json())
+            .then((data) => setServices(data))
+            .catch((err) => console.error('Failed to load services:', err));
+    }, []);
     console.log(services);
 
     return (
