@@ -17,7 +17,7 @@ const PaymentHistory = () => {
     })
     return (
         <div>
-            <h2 className='text-4xl font-semibold'>Payment history: {payments.length}</h2>
+            <h2 className='text-3xl font-semibold text-secondary m-6 bg-secondary/10 p-5 rounded-4xl'>Payment history: {payments.length}</h2>
 
             <div className='overflow-x-auto'>
                 <table className="table table-zebra">
@@ -29,7 +29,7 @@ const PaymentHistory = () => {
                             <th>Amount</th>
                             <th>Paid Time</th>
                             <th>Transaction Id</th>
-                            <th>Paid time</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -40,7 +40,7 @@ const PaymentHistory = () => {
                                 <td>${payment.amount}</td>
                                 <td>{payment.paidAt}</td>
                                 <td>{payment.transactionId}</td>
-                                <td>{payment.paidAt}</td>
+                                
                             </tr>)
                         }
 

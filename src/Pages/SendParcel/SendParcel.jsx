@@ -1,12 +1,15 @@
 import { log } from 'firebase/firestore/pipelines';
 import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import { useLoaderData, useNavigate } from 'react-router';
+import { useLoaderData, useNavigate, useParams } from 'react-router';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import useAuth from '../../Hooks/useAuth';
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 const SendParcel = () => {
+    const { id } = useParams();
 
     const serviceCenters = useLoaderData();
     const regionsDuplicate = serviceCenters.map(c => c.region);
@@ -17,10 +20,11 @@ const SendParcel = () => {
         handleSubmit,
         formState: { errors },
         control,
+        reset
 
     } = useForm();
     const { user } = useAuth();
-    console.log(user);
+   // console.log(user);
 
 
     const axiosSecure = useAxiosSecure();
@@ -38,85 +42,119 @@ const SendParcel = () => {
         return districts;
     }
 
+    const { data: parcelData } = useQuery({
+        queryKey: ['parcel', id],
+        enabled: !!id,
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/parcels/${id}`);
+            return res.data;
+        }
+    });
+
+    useEffect(() => {
+        if (parcelData) {
+            reset(parcelData);
+        }
+    }, [parcelData, reset]);
+    
+
 
 
 
     const handleSendParcel = data => {
-        console.log(data);
-        const isDocument = data.parcelType === 'document';
-        const issameDistrict = data.senderDistrict === data.receiverDistrict;
-        const parcelWeight = parseFloat(data.parcelWeight)
+        
+        // console.log(data);
+        if (!id) {
+            const isDocument = data.parcelType === 'document';
+            const issameDistrict = data.senderDistrict === data.receiverDistrict;
+            const parcelWeight = parseFloat(data.parcelWeight)
 
 
-        let cost = 0;
-        if (isDocument) {
-            cost = issameDistrict ? 60 : 100;
-
-        }
-        else {
-            if (parcelWeight < 3) {
-                cost = issameDistrict ? 110 : 150;
+            let cost = 0;
+            if (isDocument) {
+                cost = issameDistrict ? 60 : 100;
 
             }
             else {
-                const minCharge = issameDistrict ? 110 : 150;
-                const extraWeight = parcelWeight - 3;
-                const extraCharge = issameDistrict ? extraWeight * 30 : extraWeight * 30 + 30;
-                cost = minCharge + extraCharge;
+                if (parcelWeight < 3) {
+                    cost = issameDistrict ? 110 : 150;
+
+                }
+                else {
+                    const minCharge = issameDistrict ? 110 : 150;
+                    const extraWeight = parcelWeight - 3;
+                    const extraCharge = issameDistrict ? extraWeight * 30 : extraWeight * 30 + 30;
+                    cost = minCharge + extraCharge;
 
 
 
+                }
             }
+            console.log('cost', cost);
+            data.cost = cost;
+            Swal.fire({
+                title: "Are you agreeing with our cost?",
+                text: `You've to pay ${cost} BDT`,
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Agreed. Proceed to payment."
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    axiosSecure.post('/parcels', data)
+                        .then(res => {
+                            console.log('after saving parcel', res.data);
+                            if (res.data.insertedId) {
+                                navigate('/dashboard/my-parcels')
+                                Swal.fire({
+                                    position: "center",
+                                    icon: "success",
+                                    title: "Your parcel has created. please pay!",
+                                    showConfirmButton: false,
+                                    timer: 2500
+                                });
+
+                            }
+                        })
+
+                }
+            });
+
+
         }
-        console.log('cost', cost);
-        data.cost = cost;
-        Swal.fire({
-            title: "Are you agreeing with our cost?",
-            text: `You've to pay ${cost} BDT`,
-            icon: "question",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Agreed. Proceed to payment."
-        }).then((result) => {
-            if (result.isConfirmed) {
-
-                axiosSecure.post('/parcels', data)
-                    .then(res => {
-                        console.log('after saving parcel', res.data);
-                        if (res.data.insertedId) {
-                            navigate('/dashboard/my-parcels')
-                            Swal.fire({
-                                position: "center",
-                                icon: "success",
-                                title: "Your parcel has created. please pay!",
-                                showConfirmButton: false,
-                                timer: 2500
-                            });
-
-                        }
-                    })
-
-            }
-        });
+        else {
+            axiosSecure.patch(`/parcels/${id}`, data)
+                .then(res => {
+                    if (res.data.modifiedCount) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Parcel Updated Successfully",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                        navigate('/dashboard/my-parcels');
+                    }
+                });
+        }
+    };
 
 
 
-
-
-
-    }
     return (
         <div>
-            <h2 className="text-4xl font-semibold text-primary/90 bg-primary/10 inline-block p-3 rounded-2xl ">Send A Parcel</h2>
+            <h2 className="text-4xl font-semibold text-primary/90 bg-primary/10 inline-block p-3 rounded-2xl">
+                {id ? "Edit Parcel" : "Send A Parcel"}
+            </h2>
             <form onSubmit={handleSubmit(handleSendParcel)} className='mt-12 p-4 text-black'>
                 <div>
                     <label className="label mr-4">
-                        <input type="radio" {...register('parcelType')} value="document" className="radio" defaultChecked />
+                        <input type="radio" {...register('parcelType')} value="document" className="radio" defaultChecked={!parcelData || parcelData.parcelType === "document"}  />
                         Document
                     </label>
                     <label className="label">
-                        <input type="radio" {...register('parcelType')} value="non-document" className="radio" />
+                        <input type="radio" {...register('parcelType')} value="non-document" className="radio" defaultChecked={parcelData?.parcelType === "non-document"} />
                         Non-Document
                     </label>
                 </div>
@@ -125,12 +163,18 @@ const SendParcel = () => {
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-12 my-8'>
                     <fieldset className="fieldset">
                         <label className="label">Parcel Name</label>
-                        <input type="text" {...register('parcelName')} className="input w-full" placeholder="Parcel Name" />
+                        <input type="text" {...register('parcelName',{ required: true })} className="input w-full" placeholder="Parcel Name" />
+                        {errors.parcelName && (
+                            <p className='text-red-500'>Parcel Name is required</p>
+                        )}
                     </fieldset>
 
                     <fieldset className="fieldset">
                         <label className="label">Parcel Weight (kg)</label>
-                        <input type="number" {...register('parcelWeight')} className="input w-full" placeholder="Parcel Weight" />
+                        <input type="number" {...register('parcelWeight',{ required: true })} className="input w-full" placeholder="Parcel Weight" />
+                         {errors.parcelWeight && (
+                            <p className='text-red-500'>Parcel Weight is required</p>
+                        )}
                     </fieldset>
 
                 </div>
@@ -180,7 +224,10 @@ const SendParcel = () => {
 
                         {/* sender Address */}
                         <label className="label mt-4">Sender Address</label>
-                        <input type="text" {...register('senderAddress')} className="input w-full" placeholder="Sender Address" />
+                        <input type="text" {...register('senderAddress', { required: true })} className="input w-full" placeholder="Sender Address" />
+                         {errors.senderAddress && (
+                            <p className='text-red-500'>Sender Address is required</p>
+                        )}
 
                         <label className="label mt-4">Sender Mobile Number</label>
 
@@ -246,7 +293,10 @@ const SendParcel = () => {
 
                         {/* receiver address */}
                         <label className="label mt-4">Receiver Address</label>
-                        <input type="text" {...register('receiverAddress')} className="input w-full" placeholder="Receiver Address" />
+                        <input type="text" {...register('receiverAddress',{ required: true })} className="input w-full" placeholder="Receiver Address" />
+                         {errors.receiverAddress && (
+                            <p className='text-red-500'>Address is required</p>
+                        )}
 
                         <label className="label mt-4">Reciever Mobile Number</label>
 
@@ -274,7 +324,7 @@ const SendParcel = () => {
                     </fieldset>
                 </div>
 
-                <input type="submit" className='btn btn-primary mt-8 text-black' value="Send Parcel" />
+                <input type="submit" className='btn btn-primary mt-8 text-black' value={id ? "Update Parcel" : "Send Parcel"} />
 
 
             </form>

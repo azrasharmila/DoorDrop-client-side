@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useAuth from '../../../Hooks/useAuth';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
 import { FiEdit } from 'react-icons/fi';
 import { FaMagnifyingGlass, FaTrashCan } from 'react-icons/fa6';
 import Swal from 'sweetalert2';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import StatusCard from '../../../Components/StatusCard/StatusCard';
 
 const MyParcels = () => {
 
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
+    const [selectedParcel, setSelectedParcel] = useState(null);
+    const navigate = useNavigate();
 
     const { data: parcels = [], refetch } = useQuery({
         queryKey: ['myParcels', user?.email],
@@ -100,7 +102,7 @@ const MyParcels = () => {
                 />
 
             </div>
-            
+
             <div className="overflow-x-auto">
                 <table className="table table-zebra">
                     {/* head */}
@@ -137,12 +139,23 @@ const MyParcels = () => {
 
                                 <td>{parcel.deliveryStatus}</td>
                                 <td>
-                                    <button className='btn btn-square hover:bg-primary'>
+                                    <button
+                                        onClick={() => setSelectedParcel(parcel)}
+                                        className='btn btn-square hover:bg-primary'>
                                         <FaMagnifyingGlass />
                                     </button>
-                                    <button className='btn btn-square hover:bg-primary mx-2'>
-                                        <FiEdit></FiEdit>
+
+                                    <button
+                                        disabled={parcel.paymentStatus === "paid"}
+                                        onClick={() => navigate(`/edit-parcel/${parcel._id}`)}
+                                        className={`btn btn-square mx-2 
+                                         ${parcel.paymentStatus === "paid"
+                                                ? "btn-disabled cursor-not-allowed"
+                                                : "hover:bg-primary"}`}
+                                    >
+                                        <FiEdit />
                                     </button>
+
                                     <button
                                         onClick={() => handleParcelDelete(parcel._id)}
                                         className='btn btn-square hover:bg-primary'>
@@ -154,6 +167,27 @@ const MyParcels = () => {
 
                     </tbody>
                 </table>
+                {selectedParcel && (
+                    <div className="modal modal-open">
+                        <div className="modal-box">
+                            <h3 className="font-bold text-lg mb-4 text-primary">Parcel Details</h3>
+
+                            <p><strong className='text-accent'>Name:</strong> {selectedParcel.parcelName}</p>
+                            <p><strong className='text-accent'>Cost:</strong> {selectedParcel.cost}</p>
+                            <p><strong className='text-accent'>Tracking ID:</strong> {selectedParcel.trackingId}</p>
+                            <p><strong className='text-accent'>Delivery Status:</strong> {selectedParcel.deliveryStatus}</p>
+                            <p><strong className='text-accent'>Payment Status:</strong> {selectedParcel.paymentStatus}</p>
+
+                            <div className="modal-action">
+                                <button
+                                    onClick={() => setSelectedParcel(null)}
+                                    className="btn btn-secondary text-black">
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

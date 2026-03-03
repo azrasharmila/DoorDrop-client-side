@@ -28,23 +28,47 @@ const ApproveRiders = () => {
         rider => rider.status === "Rejected"
     ).length;
 
-    const updateRiderStatus = (rider, status) => {
-        const updateInfo = { status: status, email:rider.email }
-        axiosSecure.patch(`/riders/${rider._id}`, updateInfo)
-            .then(res => {
-                if (res.data.modifiedCount) {
-                    refetch();
-                    Swal.fire({
-                        position: "center",
-                        icon: "success",
-                        title: `Rider status is set to ${status}`,
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
-                }
-            })
+   const updateRiderStatus = (rider, status) => {
 
-    }
+    const isApprove = status === "approved";
+
+    Swal.fire({
+        title: `${isApprove ? "Approve" : "Reject"} ${rider.name}?`,
+        text: isApprove
+            ? "This rider will be able to start working."
+            : "This rider application will be rejected.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: `Yes, ${isApprove ? "Approve" : "Reject"}`,
+        cancelButtonText: "Cancel",
+        confirmButtonColor: isApprove
+            ? "var(--color-secondary)"  
+            : "var(--color-primary)",   
+        cancelButtonColor: isApprove
+            ? "var(--color-primary)"
+            : "var(--color-secondary)"
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+
+            const updateInfo = { status: status, email: rider.email };
+
+            axiosSecure.patch(`/riders/${rider._id}`, updateInfo)
+                .then(res => {
+                    if (res.data.modifiedCount) {
+                        refetch();
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            title: `Rider status set to ${status}`,
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    }
+                });
+        }
+    });
+};
 
     const handleApproval = (rider) => {
         updateRiderStatus(rider, 'approved');
@@ -141,7 +165,7 @@ const ApproveRiders = () => {
                                 <td>{rider.district}</td>
                                 <td>{rider.license}</td>
                                 <td>
-                                    <p className={`${rider.status === 'approved' ? 'text-green-800' : 'text-red-500'}`}>{rider.status}</p>
+                                    <p className={`${rider.status === 'approved' ? 'text-secondary' : 'text-primary'}`}>{rider.status}</p>
                                 </td>
                                 <td>{rider.workStatus}</td>
                                 <td>

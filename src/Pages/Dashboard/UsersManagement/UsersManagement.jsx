@@ -5,13 +5,14 @@ import StatusCard from '../../../Components/StatusCard/StatusCard';
 import { FiShieldOff } from 'react-icons/fi';
 import { FaUserShield } from 'react-icons/fa6';
 import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
 
 const UsersManagement = () => {
     const axiosSecure = useAxiosSecure();
-    const [searchText, setSearchText]= useState('');
+    const [searchText, setSearchText] = useState('');
 
-    const {refetch, data: users = [] } = useQuery({
-        queryKey: ['users',searchText],
+    const { refetch, data: users = [] } = useQuery({
+        queryKey: ['users', searchText],
         queryFn: async () => {
             const res = await axiosSecure.get(`/users?searchText=${searchText}`);
             return res.data;
@@ -28,36 +29,60 @@ const UsersManagement = () => {
     ).length;
 
 
-    const handleMakeAdmin = user =>{
-        const roleInfo = {role:'admin'}
-        axiosSecure.patch(`users/${user._id}/role`, roleInfo)
-        .then(res =>{
-            console.log(res.data);
-            
-            if(res.data.modifiedCount){
-                refetch();
-                toast.success(`${user.displayName} marked as an Admin`)
 
+
+    const handleMakeAdmin = (user) => {
+        Swal.fire({
+            title: `Make ${user.displayName} an Admin?`,
+            text: "This user will get full admin access.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Make Admin",
+            cancelButtonText: "Cancel",
+            confirmButtonColor: "var(--color-primary)",
+            cancelButtonColor: "var(--color-secondary)"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const roleInfo = { role: 'admin' };
+
+                axiosSecure.patch(`users/${user._id}/role`, roleInfo)
+                    .then(res => {
+                        if (res.data.modifiedCount) {
+                            refetch();
+                            toast.success(`${user.displayName} marked as Admin`);
+                        }
+                    });
             }
-        })
-    }
+        });
+    };
 
-    const handleRemoveAdmin = user =>{
-         const roleInfo = {role:'user'}
-        axiosSecure.patch(`users/${user._id}/role`, roleInfo)
-        .then(res =>{
-            console.log(res.data);
-            
-            if(res.data.modifiedCount){
-                refetch();
-                toast.success(`${user.displayName} has been removed from Admin`)
+   const handleRemoveAdmin = (user) => {
+    Swal.fire({
+        title: `Remove ${user.displayName} from Admin?`,
+        text: "This user will lose admin privileges.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Remove",
+        cancelButtonText: "Cancel",
+        confirmButtonColor: "var(--color-secondary)",
+        cancelButtonColor: "var(--color-primary)"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const roleInfo = { role: 'user' };
 
-            }
-        })
-    }
+            axiosSecure.patch(`users/${user._id}/role`, roleInfo)
+                .then(res => {
+                    if (res.data.modifiedCount) {
+                        refetch();
+                        toast.success(`${user.displayName} removed from Admin`);
+                    }
+                });
+        }
+    });
+};
     return (
         <div>
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
 
                 <StatusCard
                     title="Total users"
@@ -77,26 +102,26 @@ const UsersManagement = () => {
             </div>
 
             <div className='flex justify-end mb-8'>
-                 <label className="input">
-                <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <g
-                        strokeLinejoin="round"
-                        strokeLinecap="round"
-                        strokeWidth="2.5"
-                        fill="none"
-                        stroke="currentColor"
-                    >
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.3-4.3"></path>
-                    </g>
-                </svg>
-                <input onChange={(e)=>setSearchText(e.target.value)}
-                    
-                    type="search"
-                    className="grow"
-                    placeholder="Search users" />
+                <label className="input">
+                    <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <g
+                            strokeLinejoin="round"
+                            strokeLinecap="round"
+                            strokeWidth="2.5"
+                            fill="none"
+                            stroke="currentColor"
+                        >
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.3-4.3"></path>
+                        </g>
+                    </svg>
+                    <input onChange={(e) => setSearchText(e.target.value)}
 
-            </label>
+                        type="search"
+                        className="grow"
+                        placeholder="Search users" />
+
+                </label>
             </div>
             <div className="overflow-x-auto">
                 <table className="table">
@@ -110,7 +135,7 @@ const UsersManagement = () => {
                             <th>Email</th>
                             <th>Role</th>
                             <th>Admin Action</th>
-                            
+
                         </tr>
                     </thead>
                     <tbody>
@@ -139,21 +164,24 @@ const UsersManagement = () => {
                             <td>
                                 {user.role}
                             </td>
-                             <td>
+                            <td>
                                 {user.role === 'admin' ?
-                                    <button
+                                    <div className="tooltip tooltip-top" data-tip="Remove Admin"><button
                                         onClick={() => handleRemoveAdmin(user)}
                                         className='btn bg-primary'>
                                         <FiShieldOff />
-                                    </button> :
-                                    <button
+                                    </button></div> :
+                                    <div  className="tooltip tooltip-top" data-tip="Make Admin">
+                                        <button
                                         onClick={() => handleMakeAdmin(user)}
                                         className='btn bg-secondary'>
                                         <FaUserShield></FaUserShield>
                                     </button>
+                                    </div>
                                 }
+                               
                             </td>
-                          
+
                         </tr>)}
 
 
