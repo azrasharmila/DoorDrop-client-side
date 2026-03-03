@@ -173,10 +173,16 @@ const MyParcels = () => {
                             <h3 className="font-bold text-lg mb-4 text-primary">Parcel Details</h3>
 
                             <p><strong className='text-accent'>Name:</strong> {selectedParcel.parcelName}</p>
+                             <p><strong className='text-accent'>Weight:</strong> {selectedParcel.parcelWeight}</p>
                             <p><strong className='text-accent'>Cost:</strong> {selectedParcel.cost}</p>
                             <p><strong className='text-accent'>Tracking ID:</strong> {selectedParcel.trackingId}</p>
                             <p><strong className='text-accent'>Delivery Status:</strong> {selectedParcel.deliveryStatus}</p>
                             <p><strong className='text-accent'>Payment Status:</strong> {selectedParcel.paymentStatus}</p>
+                            <p><strong className='text-accent'>Receiver name:</strong> {selectedParcel.receiverName}</p>
+                            <p><strong className='text-accent'>Receiver district:</strong> {selectedParcel.receiverDistrict}</p>
+                            <p><strong className='text-accent'>Receiver Address:</strong> {selectedParcel.receiverAddress}</p>
+                            <p><strong className='text-accent'>Receiver Contact:</strong> {selectedParcel.receiverMobile}</p>
+
 
                             <div className="modal-action">
                                 <button
