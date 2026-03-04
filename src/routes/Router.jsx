@@ -19,6 +19,7 @@ import UsersManagement from "../Pages/Dashboard/UsersManagement/UsersManagement"
 import AdminRoute from "./AdminRoute";
 import Services from "../Pages/Home/services/Services";
 import AssignRiders from "../Pages/Dashboard/AssignRiders/AssignRiders";
+import Profile from "../Pages/Shared/Profile/Profile";
 
 
 
@@ -113,7 +114,11 @@ export const router = createBrowserRouter([
       {
         path: 'users-management',
         element: <AdminRoute><UsersManagement></UsersManagement></AdminRoute>
-      }
+      },
+      {
+        path: 'profile',
+        Component: Profile
+      },
 
 
     ],
