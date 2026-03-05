@@ -1,5 +1,4 @@
-import { log } from 'firebase/firestore/pipelines';
-import React from 'react';
+///import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useLoaderData, useNavigate, useParams } from 'react-router';
 import Swal from 'sweetalert2';
@@ -125,7 +124,7 @@ const SendParcel = () => {
 
         }
         else {
-            axiosSecure.patch(`/parcels/${id}`, data)
+            axiosSecure.patch(`/parcels/update/${id}`, data)
                 .then(res => {
                     if (res.data.modifiedCount) {
                         Swal.fire({
