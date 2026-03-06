@@ -9,7 +9,7 @@ const AssignedDeliveries = () => {
     const axiosSecure = useAxiosSecure();
     const { data: parcels = [], refetch } = useQuery({
         queryKey: ['parcels', user.email, 'driver_assigned'],
-        enabled: !!user?.email,
+       
         queryFn: async () => {
             const res = await axiosSecure.get(`/parcels/rider?riderEmail=${user.email}&deliveryStatus=driver_assigned`)
             return res.data
@@ -20,7 +20,9 @@ const AssignedDeliveries = () => {
         console.log('Clicked parcel:', parcel);
         console.log('Parcel ID:', parcel._id);
         console.log('Status to update:',status);
-        const statusInfo = { deliveryStatus: status };
+        const statusInfo = { deliveryStatus: status, 
+            riderId:parcel.riderId
+        };
         let message = `Parcel Status is updated with ${status.split('_').join(' ')}`
 
 

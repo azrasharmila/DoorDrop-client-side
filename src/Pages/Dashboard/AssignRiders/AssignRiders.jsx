@@ -22,7 +22,11 @@ const AssignRiders = () => {
         queryKey: ['riders', selectedParcel?.senderDistrict, 'available'],
         enabled: !!selectedParcel,
         queryFn: async () => {
-            const res = await axiosSecure.get(`/riders?status=approved&district=${selectedParcel?.senderDistrict}&workStatus=available`);
+            const url = `/riders?status=approved&district=${selectedParcel?.senderDistrict}&workStatus=available`;
+
+        console.log("Fetching riders from:", url);
+
+        const res = await axiosSecure.get(url);
             return res.data;
         }
     })
@@ -52,7 +56,7 @@ const handleAssignRider = async (rider) => {
 
         console.log("Server response:", res.data);
 
-        await axiosSecure.patch(`/riders/${rider._id}`, { workStatus: "busy" });
+        await axiosSecure.patch(`/riders/${rider._id}`, { workStatus: "in_delivery" });
         riderModalRef.current.close();
 
         
