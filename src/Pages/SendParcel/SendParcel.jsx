@@ -269,7 +269,7 @@ const SendParcel = () => {
 
                         {/* receiver region */}
                         <fieldset className="fieldset">
-                            <legend className="fieldset-legend">Sender Regions</legend>
+                            <legend className="fieldset-legend">Receiver Regions</legend>
                             <select {...register('receiverRegion')} defaultValue="Pick a region" className="select">
                                 <option disabled={true}>Pick a region</option>
                                 {
@@ -280,7 +280,7 @@ const SendParcel = () => {
 
                         {/* receiver districts */}
                         <fieldset className="fieldset">
-                            <legend className="fieldset-legend">Sender Districts</legend>
+                            <legend className="fieldset-legend">Receiver Districts</legend>
                             <select {...register('receiverDistrict')} defaultValue="Pick a district" className="select">
                                 <option disabled={true}>Pick a district</option>
                                 {

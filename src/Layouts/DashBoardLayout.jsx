@@ -1,6 +1,7 @@
 import React from 'react';
 import { CiDeliveryTruck } from 'react-icons/ci';
-import { FaRegCreditCard, FaUsers,FaTasks } from "react-icons/fa";
+import { SiGoogletasks } from 'react-icons/si';
+import { FaRegCreditCard, FaUsers, FaTasks } from "react-icons/fa";
 import { MdAssignmentAdd, MdOutlineDirectionsBike } from 'react-icons/md';
 import { Link, NavLink, Outlet, useNavigate } from 'react-router';
 import useRole from '../Hooks/useRole';
@@ -116,18 +117,25 @@ const DashboardLayout = () => {
                             </NavLink>
                         </li>
                         {
-                            role ==='rider' && <>
-                            <li className='mb-3'>
+                            role === 'rider' && <>
+                                <li className='mb-3'>
                                     <NavLink className={({ isActive }) =>
                                         `is-drawer-close:tooltip is-drawer-close:tooltip-right flex items-center gap-2
                                  ${isActive ? " text-secondary text-lg bg-accent/10" : ""}`
                                     } data-tip="Assigned Deliveries " to="/dashboard/assigned-deliveries">
-                                        <FaTasks className='text-primary'/>
-                                        <span className="is-drawer-close:hidden">Assigned Deliverie</span>
+                                        <FaTasks className='text-primary' />
+                                        <span className="is-drawer-close:hidden">Assigned Deliveries</span>
+                                    </NavLink>
+                                </li>
+                                
+                                <li>
+                                    <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Completed Deliveries" to="/dashboard/completed-deliveries">
+                                        <SiGoogletasks className='text-primary' />
+                                        <span className="is-drawer-close:hidden">Completed Deliveries</span>
                                     </NavLink>
                                 </li>
 
-                            
+
                             </>
                         }
 

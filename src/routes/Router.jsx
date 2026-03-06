@@ -22,6 +22,7 @@ import AssignRiders from "../Pages/Dashboard/AssignRiders/AssignRiders";
 import Profile from "../Pages/Shared/Profile/Profile";
 import RiderRoute from "./RiderRoute";
 import AssignedDeliveries from "../Pages/Dashboard/AssignedDeliveries/AssignedDeliveries";
+import CompletedDeliveries from "../Pages/Dashboard/CompletedDeliveries/CompletedDeliveries";
 
 
 
@@ -105,9 +106,16 @@ export const router = createBrowserRouter([
         path: 'payment-history',
         Component: PaymentHistory
       },
+      //rider only routes
       {
         path:'assigned-deliveries',
         element:<RiderRoute><AssignedDeliveries></AssignedDeliveries></RiderRoute>
+
+      },
+      
+      {
+        path:'completed-deliveries',
+        element:<RiderRoute><CompletedDeliveries></CompletedDeliveries></RiderRoute>
 
       },
       {
