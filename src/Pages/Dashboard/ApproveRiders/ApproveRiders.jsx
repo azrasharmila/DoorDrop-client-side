@@ -140,30 +140,30 @@ const ApproveRiders = () => {
 
             </div>
 
-
-            <div className="overflow-x-auto">
-                <table className="table table-zebra">
+            
+            <div className="hidden md:block overflow-x-auto w-full">
+                <table className="table table-zebra w-full min-w-[600px]">
                     {/* head */}
                     <thead>
                         <tr>
                             <th></th>
 
-                            <th>Name</th>
-                            <th>District</th>
-                            <th>License</th>
+                            <th >Name</th>
+                            <th >District</th>
+                            <th >License</th>
                             <th>Application status</th>
                             <th>Work Status</th>
-                            <th>Actions</th>
+                            <th >Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
                             riders.map((rider, index) => <tr key={index}>
-                                <th>{index + 1}</th>
+                                <th >{index + 1}</th>
 
                                 <td>{rider.name}</td>
-                                <td>{rider.district}</td>
-                                <td>{rider.license}</td>
+                                <td >{rider.district}</td>
+                                <td >{rider.license}</td>
                                 <td>
                                     <p className={`${rider.status === 'approved' ? 'text-secondary' : 'text-primary'}`}>{rider.status}</p>
                                 </td>
@@ -210,6 +210,34 @@ const ApproveRiders = () => {
 
                     </tbody>
                 </table>
+            </div>
+
+
+             <div className="block md:hidden">
+                {riders.map((rider, index) => (
+                    <div key={index} className="p-4 mb-4 shadow rounded-lg border border-gray-200">
+                        <p><span className="font-bold">Name:</span> {rider.name}</p>
+                        <p><span className="font-bold">District:</span> {rider.district}</p>
+                        <p><span className="font-bold">License:</span> {rider.license}</p>
+                        <p>
+                            <span className="font-bold">Application Status:</span> 
+                            <span className={`${rider.status === 'approved' ? 'text-secondary' : 'text-primary'}`}>
+                                {rider.status}
+                            </span>
+                            </p>
+                        <p><span className="font-bold">Work Status:</span> {rider.workStatus}</p>
+
+                        {/* Action Buttons */}
+                        <div className="flex gap-2 mt-2">
+                            <button onClick={() => handleApproval(rider)}
+                                className="btn btn-sm btn-square hover:bg-secondary"> <FaUserCheck /></button>
+                            <button onClick={() => handleReject(rider)}
+                                className="btn btn-sm btn-square hover:bg-primary"> <RiDeleteBack2Fill /></button>
+                            <button onClick={() => handleRiderDelete(rider._id)}
+                                className="btn btn-sm btn-square hover:bg-primary"> <FaTrashCan /></button>
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     );

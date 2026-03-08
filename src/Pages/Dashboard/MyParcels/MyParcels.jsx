@@ -7,6 +7,7 @@ import { FaMagnifyingGlass, FaTrashCan } from 'react-icons/fa6';
 import Swal from 'sweetalert2';
 import { Link, useNavigate } from 'react-router';
 import StatusCard from '../../../Components/StatusCard/StatusCard';
+import { FaStar } from 'react-icons/fa';
 
 const MyParcels = () => {
 
@@ -83,6 +84,62 @@ const MyParcels = () => {
 
 
     }
+
+    const handleReviewSubmit = (parcel) => {
+
+        Swal.fire({
+            title: "Write Your Review",
+            html: `
+            <input id="job" class="swal2-input" placeholder="Your profession">
+            <textarea id="review" class="swal2-textarea" placeholder="Write your experience"></textarea>
+        `,
+            confirmButtonText: "Submit Review",
+            showCancelButton: true,
+            preConfirm: () => {
+
+                const job = document.getElementById("job").value;
+                const review = document.getElementById("review").value;
+
+                if (!review) {
+                    Swal.showValidationMessage("Please write a review");
+                    return false;
+                }
+
+                return { job, review };
+            }
+
+        }).then(async (result) => {
+            console.log("SweetAlert result:", result);
+
+            if (result.isConfirmed) {
+
+
+                const reviewData = {
+                    userName: user.displayName,
+                    user_photoURL: user.photoURL,
+                    email: user.email,
+                    job: result.value.job,
+                    review: result.value.review,
+                    parcelId: parcel._id
+                };
+                console.log("Sending review:", reviewData);
+
+                const res = await axiosSecure.post('/reviews', reviewData);
+
+                if (res.data.insertedId) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Review submitted!",
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                    refetch();
+                }
+            }
+
+        });
+
+    };
     return (
         <div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
@@ -104,8 +161,8 @@ const MyParcels = () => {
 
             </div>
 
-            <div className="overflow-x-auto">
-                <table className="table table-zebra">
+            <div className="hidden md:block overflow-x-auto w-full">
+                <table className="table table-zebra w-full min-w-[700px]">
                     {/* head */}
                     <thead>
                         <tr className='text-secondary'>
@@ -113,8 +170,8 @@ const MyParcels = () => {
                             <th>Name</th>
                             <th>Cost</th>
                             <th>Payment</th>
-                            <th>Tracking Id</th>
-                            <th>Delivery Status</th>
+                            <th >Tracking Id</th>
+                            <th >Delivery Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -140,18 +197,18 @@ const MyParcels = () => {
                                     <Link to={`/parcel-track/${parcel.trackingId}`}>{parcel.trackingId}</Link>
                                 </td>
 
-                                <td>{parcel.deliveryStatus}</td>
-                                <td>
+                                <td >{parcel.deliveryStatus}</td>
+                                <td className="flex gap-1 md:gap-2">
                                     <button
                                         onClick={() => setSelectedParcel(parcel)}
-                                        className='btn btn-square hover:bg-primary'>
+                                        className='btn  btn-square hover:bg-primary'>
                                         <FaMagnifyingGlass />
                                     </button>
 
                                     <button
                                         disabled={parcel.paymentStatus === "paid"}
                                         onClick={() => navigate(`/edit-parcel/${parcel._id}`)}
-                                        className={`btn btn-square mx-2 
+                                        className={`btn  btn-square mx-2 
                                          ${parcel.paymentStatus === "paid"
                                                 ? "btn-disabled cursor-not-allowed"
                                                 : "hover:bg-primary"}`}
@@ -164,12 +221,70 @@ const MyParcels = () => {
                                         className='btn btn-square hover:bg-primary'>
                                         <FaTrashCan />
                                     </button>
+
+                                    {
+                                        parcel.deliveryStatus === "parcel_delivered" && (
+                                            <button
+                                                onClick={() => handleReviewSubmit(parcel)}
+                                                className="btn  btn-square ml-2 hover:bg-primary"
+                                                title="Add Review"
+                                            >
+                                                <FaStar />
+                                            </button>
+                                        )
+                                    }
                                 </td>
                             </tr>)
                         }
 
                     </tbody>
                 </table>
+                </div>
+                <div className="block md:hidden">
+                    {parcels.map((parcel, index) => (
+                        <div key={index} className="p-4 mb-4 shadow rounded-lg border border-gray-200">
+                            <p><span className="font-bold">Name:</span> {parcel.parcelName}</p>
+                            <p><span className="font-bold">Cost:</span> {parcel.cost}</p>
+                            <p className='font-bold'>Tracking ID :</p>
+                            <Link to={`/parcel-track/${parcel.trackingId}`}>{parcel.trackingId}</Link>
+                            <Link to={`/parcel-track/${parcel.trackingId}`}>{parcel.trackingId}</Link>
+                            
+                            <p><span className="font-bold">Delivery Status:</span> {parcel.deliveryStatus}</p>
+                            <p>
+                                <span className="font-bold">Payment:</span>
+                                {parcel.paymentStatus === 'paid'
+                                    ? <span className="text-secondary">Paid</span>
+                                    : <button onClick={() => handlePayment(parcel)} className="btn btn-sm btn-primary w-full text-black mt-1">Pay</button>
+                                }
+                            </p>
+                            <div className="flex flex-wrap gap-2 mt-2">
+                                <button onClick={() => setSelectedParcel(parcel)} className='btn btn-sm btn-square'>
+                                    <FaMagnifyingGlass />
+                                </button>
+                                <button
+                                    disabled={parcel.paymentStatus === "paid"}
+                                    onClick={() => navigate(`/edit-parcel/${parcel._id}`)}
+                                    className={`btn btn-sm btn-square ${parcel.paymentStatus === "paid" ? "btn-disabled cursor-not-allowed" : "hover:bg-primary"}`}
+                                >
+                                    <FiEdit />
+                                </button>
+                                <button onClick={() => handleParcelDelete(parcel._id)} className='btn btn-sm btn-square'>
+                                    <FaTrashCan />
+                                </button>
+                                {parcel.deliveryStatus === "parcel_delivered" && (
+                                    <button
+                                        onClick={() => handleReviewSubmit(parcel)}
+                                        className="btn btn-sm btn-square"
+                                        title="Add Review"
+                                    >
+                                        <FaStar />
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
                 {selectedParcel && (
                     <div className="modal modal-open">
                         <div className="modal-box">
@@ -198,7 +313,7 @@ const MyParcels = () => {
                     </div>
                 )}
             </div>
-        </div>
+        
     );
 };
 

@@ -9,7 +9,7 @@ const Services = () => {
             .then((data) => setServices(data))
             .catch((err) => console.error('Failed to load services:', err));
     }, []);
-    console.log(services);
+   // console.log(services);
 
     return (
         <section className="bg-[#efecec] rounded-2xl max-w-screen-2xl mx-auto py-20 px-6 md:px-12 flex items-center">

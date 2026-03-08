@@ -1,20 +1,25 @@
-import React, { useEffect, useState } from 'react';
+//import React, { useEffect, useState } from 'react';
 import { Autoplay, EffectCoverflow, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import ReviewCard from './ReviewCard';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
+import useAxiosSecure from '../../../Hooks/useAxiosSecure';
+import { useQuery } from '@tanstack/react-query';
 
-const Reviews = ({ reviewsPromise }) => {
+const Reviews = () => {
+    const axiosSecure = useAxiosSecure();
 
-    const [reviews, setReviews] = useState([]);
+   // const [reviews, setReviews] = useState([]);
 
-    useEffect(() => {
-        reviewsPromise.then(data => {
-            setReviews(data);
-        });
-    }, [reviewsPromise]);
+    const { data: reviews = [], } = useQuery({
+        queryKey: ['reviews'],
+        queryFn: async () => {
+            const res = await axiosSecure.get('/reviews');
+            return res.data;
+        }
+    });
 
     return (
         <div className='my-24'>
@@ -23,8 +28,11 @@ const Reviews = ({ reviewsPromise }) => {
                 <p className='text-primary inline-block font-medium bg-primary/10 p-9 rounded-4xl'>Hear directly from our customers about their experience with our fast, reliable, and secure delivery service. <br />Their satisfaction drives everything we do.</p>
             </div>
 
-            <Swiper className='mySwiper mb-20'
+            {reviews.length > 0 && (
+                <Swiper className='mySwiper mb-20'
                 loop={true}
+                 observer={true}
+                 observeParents={true}
                 effect={'coverflow'}
                 grabCursor={true}
                 centeredSlides={true}
@@ -46,12 +54,13 @@ const Reviews = ({ reviewsPromise }) => {
             >
                 {
                     reviews.map(review => (
-                        <SwiperSlide key={review.id}>
+                        <SwiperSlide key={review._id}>
                             <ReviewCard review={review} />
                         </SwiperSlide>
                     ))
                 }
             </Swiper>
+            )}
         </div>
     );
 };
