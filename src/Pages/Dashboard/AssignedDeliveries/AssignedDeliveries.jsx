@@ -9,7 +9,7 @@ const AssignedDeliveries = () => {
     const axiosSecure = useAxiosSecure();
     const { data: parcels = [], refetch } = useQuery({
         queryKey: ['parcels', user.email, 'driver_assigned'],
-       
+
         queryFn: async () => {
             const res = await axiosSecure.get(`/parcels/rider?riderEmail=${user.email}&deliveryStatus=driver_assigned`)
             return res.data
@@ -19,9 +19,11 @@ const AssignedDeliveries = () => {
     const handleDeliveryStatusUpdate = (parcel, status) => {
         console.log('Clicked parcel:', parcel);
         console.log('Parcel ID:', parcel._id);
-        console.log('Status to update:',status);
-        const statusInfo = { deliveryStatus: status, 
-            riderId:parcel.riderId
+        console.log('Status to update:', status);
+        const statusInfo = {
+            deliveryStatus: status,
+            riderId: parcel.riderId,
+            trackingId: parcel.trackingId
         };
         let message = `Parcel Status is updated with ${status.split('_').join(' ')}`
 
@@ -88,17 +90,17 @@ const AssignedDeliveries = () => {
                                 <button
                                     onClick={() => handleDeliveryStatusUpdate(parcel, 'parcel_picked_up')}
                                     className='btn btn-primary text-black'>Mark as Picked Up</button>
-                                    
-                            <button
-                                onClick={() => handleDeliveryStatusUpdate(parcel, 'parcel_delivered')}
-                                className='btn btn-primary text-black mx-2'>Mark as Delivered</button>
-                        </td>
+
+                                <button
+                                    onClick={() => handleDeliveryStatusUpdate(parcel, 'parcel_delivered')}
+                                    className='btn btn-primary text-black mx-2'>Mark as Delivered</button>
+                            </td>
                         </tr>)}
 
 
-                </tbody>
-            </table>
-        </div>
+                    </tbody>
+                </table>
+            </div>
         </div >
     );
 };

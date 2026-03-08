@@ -28,47 +28,47 @@ const ApproveRiders = () => {
         rider => rider.status === "Rejected"
     ).length;
 
-   const updateRiderStatus = (rider, status) => {
+    const updateRiderStatus = (rider, status) => {
 
-    const isApprove = status === "approved";
+        const isApprove = status === "approved";
 
-    Swal.fire({
-        title: `${isApprove ? "Approve" : "Reject"} ${rider.name}?`,
-        text: isApprove
-            ? "This rider will be able to start working."
-            : "This rider application will be rejected.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: `Yes, ${isApprove ? "Approve" : "Reject"}`,
-        cancelButtonText: "Cancel",
-        confirmButtonColor: isApprove
-            ? "var(--color-secondary)"  
-            : "var(--color-primary)",   
-        cancelButtonColor: isApprove
-            ? "var(--color-primary)"
-            : "var(--color-secondary)"
-    }).then((result) => {
+        Swal.fire({
+            title: `${isApprove ? "Approve" : "Reject"} ${rider.name}?`,
+            text: isApprove
+                ? "This rider will be able to start working."
+                : "This rider application will be rejected.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: `Yes, ${isApprove ? "Approve" : "Reject"}`,
+            cancelButtonText: "Cancel",
+            confirmButtonColor: isApprove
+                ? "var(--color-secondary)"
+                : "var(--color-primary)",
+            cancelButtonColor: isApprove
+                ? "var(--color-primary)"
+                : "var(--color-secondary)"
+        }).then((result) => {
 
-        if (result.isConfirmed) {
+            if (result.isConfirmed) {
 
-            const updateInfo = { status: status, email: rider.email };
+                const updateInfo = { status: status, email: rider.email };
 
-            axiosSecure.patch(`/riders/${rider._id}`, updateInfo)
-                .then(res => {
-                    if (res.data.modifiedCount) {
-                        refetch();
-                        Swal.fire({
-                            position: "center",
-                            icon: "success",
-                            title: `Rider status set to ${status}`,
-                            showConfirmButton: false,
-                            timer: 2000
-                        });
-                    }
-                });
-        }
-    });
-};
+                axiosSecure.patch(`/riders/${rider._id}`, updateInfo)
+                    .then(res => {
+                        if (res.data.modifiedCount) {
+                            refetch();
+                            Swal.fire({
+                                position: "center",
+                                icon: "success",
+                                title: `Rider status set to ${status}`,
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                        }
+                    });
+            }
+        });
+    };
 
     const handleApproval = (rider) => {
         updateRiderStatus(rider, 'approved');
@@ -120,7 +120,7 @@ const ApproveRiders = () => {
 
     return (
         <div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
 
                 <StatusCard
@@ -140,7 +140,7 @@ const ApproveRiders = () => {
 
             </div>
 
-            
+
             <div className="overflow-x-auto">
                 <table className="table table-zebra">
                     {/* head */}

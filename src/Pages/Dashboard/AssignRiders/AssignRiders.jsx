@@ -1,4 +1,4 @@
-import { useQuery,useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import { useRef } from 'react';
@@ -10,7 +10,7 @@ const AssignRiders = () => {
     const axiosSecure = useAxiosSecure();
     const riderModalRef = useRef();
     const queryClient = useQueryClient();
-    const { data: parcels = [],refetch: parcelsRefetch } = useQuery({
+    const { data: parcels = [], refetch: parcelsRefetch } = useQuery({
         queryKey: ['parcels', 'pending-pickup'],
         queryFn: async () => {
             const res = await axiosSecure.get('/parcels?deliveryStatus=pending-pickup')
@@ -24,9 +24,9 @@ const AssignRiders = () => {
         queryFn: async () => {
             const url = `/riders?status=approved&district=${selectedParcel?.senderDistrict}&workStatus=available`;
 
-        console.log("Fetching riders from:", url);
+            console.log("Fetching riders from:", url);
 
-        const res = await axiosSecure.get(url);
+            const res = await axiosSecure.get(url);
             return res.data;
         }
     })
@@ -38,49 +38,50 @@ const AssignRiders = () => {
     }
 
 
-const handleAssignRider = async (rider) => {
-    try {
-        console.log("Assign button clicked");
+    const handleAssignRider = async (rider) => {
+        try {
+            console.log("Assign button clicked");
 
-        const riderAssignInfo = {
-            riderId: rider._id,
-            riderEmail: rider.email,
-            riderName: rider.name,
-            parcelId: selectedParcel._id
-        };
+            const riderAssignInfo = {
+                riderId: rider._id,
+                riderEmail: rider.email,
+                riderName: rider.name,
+                parcelId: selectedParcel._id,
+                trackingId: selectedParcel.trackingId
+            };
 
-        const res = await axiosSecure.patch(
-            `/parcels/${selectedParcel._id}`,
-            riderAssignInfo
-        );
+            const res = await axiosSecure.patch(
+                `/parcels/${selectedParcel._id}`,
+                riderAssignInfo
+            );
 
-        console.log("Server response:", res.data);
+            console.log("Server response:", res.data);
 
-        await axiosSecure.patch(`/riders/${rider._id}`, { workStatus: "in_delivery" });
-        riderModalRef.current.close();
+            // await axiosSecure.patch(`/riders/${rider._id}`, { workStatus: "in_delivery" });
+            riderModalRef.current.close();
 
-        
-        parcelsRefetch();
-        queryClient.invalidateQueries(['riders', selectedParcel?.senderDistrict, 'available']);
 
-        Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Rider has been assigned.",
-            showConfirmButton: false,
-            timer: 1500
-        });
+            parcelsRefetch();
+            queryClient.invalidateQueries(['riders', selectedParcel?.senderDistrict, 'available']);
 
-    } catch (error) {
-        console.error("Assign error:", error);
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Rider has been assigned.",
+                showConfirmButton: false,
+                timer: 1500
+            });
 
-        Swal.fire({
-            icon: "error",
-            title: "Failed!",
-            text: "Rider assignment failed."
-        });
-    }
-};
+        } catch (error) {
+            console.error("Assign error:", error);
+
+            Swal.fire({
+                icon: "error",
+                title: "Failed!",
+                text: "Rider assignment failed."
+            });
+        }
+    };
 
     return (
         <div>
@@ -136,7 +137,7 @@ const handleAssignRider = async (rider) => {
                                     <td>{rider.email}</td>
                                     <td>
                                         <button
-                                         onClick={() => handleAssignRider(rider)}
+                                            onClick={() => handleAssignRider(rider)}
                                             className='btn btn-primary text-black'>Assign</button>
                                     </td>
                                 </tr>)}

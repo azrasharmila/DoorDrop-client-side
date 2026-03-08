@@ -15,7 +15,7 @@ const Rider = () => {
     } = useForm();
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
-   
+
 
     const serviceCenters = useLoaderData();
     const regionsDuplicate = serviceCenters.map(c => c.region);

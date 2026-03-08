@@ -75,7 +75,8 @@ const MyParcels = () => {
             cost: parcel.cost,
             parcelId: parcel._id,
             senderEmail: parcel.senderEmail,
-            parcelName: parcel.parcelName
+            parcelName: parcel.parcelName,
+            trackingId: parcel.trackingId
         }
         const res = await axiosSecure.post('/payment-checkout-session', paymentInfo);
         window.location.assign(res.data.url);
@@ -135,7 +136,9 @@ const MyParcels = () => {
 
                                     }
                                 </td>
-                                <td>{parcel.trackingId}</td>
+                                <td>
+                                    <Link to={`/parcel-track/${parcel.trackingId}`}>{parcel.trackingId}</Link>
+                                </td>
 
                                 <td>{parcel.deliveryStatus}</td>
                                 <td>
@@ -173,7 +176,7 @@ const MyParcels = () => {
                             <h3 className="font-bold text-lg mb-4 text-primary">Parcel Details</h3>
 
                             <p><strong className='text-accent'>Name:</strong> {selectedParcel.parcelName}</p>
-                             <p><strong className='text-accent'>Weight:</strong> {selectedParcel.parcelWeight}</p>
+                            <p><strong className='text-accent'>Weight:</strong> {selectedParcel.parcelWeight}</p>
                             <p><strong className='text-accent'>Cost:</strong> {selectedParcel.cost}</p>
                             <p><strong className='text-accent'>Tracking ID:</strong> {selectedParcel.trackingId}</p>
                             <p><strong className='text-accent'>Delivery Status:</strong> {selectedParcel.deliveryStatus}</p>

@@ -23,7 +23,7 @@ const SendParcel = () => {
 
     } = useForm();
     const { user } = useAuth();
-   // console.log(user);
+    // console.log(user);
 
 
     const axiosSecure = useAxiosSecure();
@@ -55,13 +55,13 @@ const SendParcel = () => {
             reset(parcelData);
         }
     }, [parcelData, reset]);
-    
+
 
 
 
 
     const handleSendParcel = data => {
-        
+
         // console.log(data);
         if (!id) {
             const isDocument = data.parcelType === 'document';
@@ -149,7 +149,7 @@ const SendParcel = () => {
             <form onSubmit={handleSubmit(handleSendParcel)} className='mt-12 p-4 text-black'>
                 <div>
                     <label className="label mr-4">
-                        <input type="radio" {...register('parcelType')} value="document" className="radio" defaultChecked={!parcelData || parcelData.parcelType === "document"}  />
+                        <input type="radio" {...register('parcelType')} value="document" className="radio" defaultChecked={!parcelData || parcelData.parcelType === "document"} />
                         Document
                     </label>
                     <label className="label">
@@ -162,7 +162,7 @@ const SendParcel = () => {
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-12 my-8'>
                     <fieldset className="fieldset">
                         <label className="label">Parcel Name</label>
-                        <input type="text" {...register('parcelName',{ required: true })} className="input w-full" placeholder="Parcel Name" />
+                        <input type="text" {...register('parcelName', { required: true })} className="input w-full" placeholder="Parcel Name" />
                         {errors.parcelName && (
                             <p className='text-red-500'>Parcel Name is required</p>
                         )}
@@ -170,8 +170,8 @@ const SendParcel = () => {
 
                     <fieldset className="fieldset">
                         <label className="label">Parcel Weight (kg)</label>
-                        <input type="number" {...register('parcelWeight',{ required: true })} className="input w-full" placeholder="Parcel Weight" />
-                         {errors.parcelWeight && (
+                        <input type="number" {...register('parcelWeight', { required: true })} className="input w-full" placeholder="Parcel Weight" />
+                        {errors.parcelWeight && (
                             <p className='text-red-500'>Parcel Weight is required</p>
                         )}
                     </fieldset>
@@ -224,7 +224,7 @@ const SendParcel = () => {
                         {/* sender Address */}
                         <label className="label mt-4">Sender Address</label>
                         <input type="text" {...register('senderAddress', { required: true })} className="input w-full" placeholder="Sender Address" />
-                         {errors.senderAddress && (
+                        {errors.senderAddress && (
                             <p className='text-red-500'>Sender Address is required</p>
                         )}
 
@@ -292,8 +292,8 @@ const SendParcel = () => {
 
                         {/* receiver address */}
                         <label className="label mt-4">Receiver Address</label>
-                        <input type="text" {...register('receiverAddress',{ required: true })} className="input w-full" placeholder="Receiver Address" />
-                         {errors.receiverAddress && (
+                        <input type="text" {...register('receiverAddress', { required: true })} className="input w-full" placeholder="Receiver Address" />
+                        {errors.receiverAddress && (
                             <p className='text-red-500'>Address is required</p>
                         )}
 
