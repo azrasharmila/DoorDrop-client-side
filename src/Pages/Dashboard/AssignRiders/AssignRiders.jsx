@@ -85,16 +85,16 @@ const AssignRiders = () => {
 
     return (
         <div>
-            <h2 className='text-4xl'>Assign riders:{parcels.length}</h2>
-            <div className="overflow-x-auto">
-                <table className="table table-zebra">
+            <h2 className='text-4xl text-secondary my-5 font-semibold'>Assign riders:{parcels.length}</h2>
+            <div className="hidden md:block overflow-x-auto w-full">
+                <table className="table table-zebra w-full min-w-[600px]">
                     {/* head */}
                     <thead>
                         <tr>
                             <th></th>
                             <th>Name</th>
-                            <th>Cost</th>
-                            <th>Created At</th>
+                            <th >Cost</th>
+                            <th >Created At</th>
                             <th>Pickup District</th>
                             <th>Action</th>
                         </tr>
@@ -103,8 +103,8 @@ const AssignRiders = () => {
                         {parcels.map((parcel, index) => <tr key={parcel._id}>
                             <th>{index + 1}</th>
                             <td>{parcel.parcelName}</td>
-                            <td>{parcel.cost}</td>
-                            <td>{parcel.createdAt}</td>
+                            <td >{parcel.cost}</td>
+                            <td >{parcel.createdAt}</td>
                             <td>{parcel.senderDistrict}</td>
                             <td>
                                 <button onClick={() => openAssignRiderModal(parcel)}
@@ -114,6 +114,24 @@ const AssignRiders = () => {
 
                     </tbody>
                 </table>
+            </div>
+            <div className="block md:hidden">
+                {parcels.map((parcel, index) => (
+                    <div key={index} className="p-4 mb-4 shadow rounded-lg border border-gray-200">
+                        <p><span className="font-bold">Name:</span> {parcel.parcelName}</p>
+                        <p><span className="font-bold">Cost:</span> {parcel.cost}</p>
+                        <p><span className="font-bold">Created At:</span> {parcel.createdAt}</p>
+                        <p><span className="font-bold">Pickup District:</span> {parcel.senderDistrict}</p>
+                        <div className="mt-2">
+                            <button
+                                onClick={() => openAssignRiderModal(parcel)}
+                                className="btn btn-sm btn-primary w-full text-black"
+                            >
+                                Find Riders
+                            </button>
+                        </div>
+                    </div>
+                ))}
             </div>
             <dialog ref={riderModalRef} className="modal modal-bottom sm:modal-middle">
                 <div className="modal-box">

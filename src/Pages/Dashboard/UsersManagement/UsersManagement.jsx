@@ -128,11 +128,11 @@ const UsersManagement = () => {
                     {/* head */}
                     <thead>
                         <tr>
-                            <th>
+                            <th className="hidden md:table-cell">
                                 #
                             </th>
                             <th>User</th>
-                            <th>Email</th>
+                            <th className="hidden md:table-cell">Email</th>
                             <th>Role</th>
                             <th>Admin Action</th>
 
@@ -140,7 +140,7 @@ const UsersManagement = () => {
                     </thead>
                     <tbody>
                         {users.map((user, index) => <tr>
-                            <td>
+                            <td className="hidden md:table-cell">
                                 {index + 1}
                             </td>
                             <td>
@@ -158,7 +158,7 @@ const UsersManagement = () => {
                                     </div>
                                 </div>
                             </td>
-                            <td>
+                            <td className="hidden md:table-cell">
                                 {user.email}
                             </td>
                             <td>

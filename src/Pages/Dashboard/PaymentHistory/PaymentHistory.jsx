@@ -25,9 +25,9 @@ const PaymentHistory = () => {
                     <thead>
                         <tr>
                             <th></th>
-                            <th>Customer Email</th>
-                            <th>Amount</th>
-                            <th>Paid Time</th>
+                            <th className="hidden md:table-cell">Customer Email</th>
+                            <th className="hidden md:table-cell">Amount</th>
+                            <th className="hidden md:table-cell">Paid Time</th>
                             <th>Transaction Id</th>
                             
                         </tr>
@@ -35,10 +35,10 @@ const PaymentHistory = () => {
                     <tbody>
                         {
                             payments.map((payment, index) => <tr key={payment._id}>
-                                <th>{index + 1}</th>
+                                <th className="hidden md:table-cell">{index + 1}</th>
                                 <td>{payment.customerEmail}</td>
-                                <td>${payment.amount}</td>
-                                <td>{payment.paidAt}</td>
+                                <td className="hidden md:table-cell">${payment.amount}</td>
+                                <td className="hidden md:table-cell">{payment.paidAt}</td>
                                 <td>{payment.transactionId}</td>
                                 
                             </tr>)
