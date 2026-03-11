@@ -53,7 +53,7 @@ const AssignedDeliveries = () => {
     };
     return (
         <div>
-            <h2 className="text-4xl">Parcels Pending Pickup: {parcels.length}</h2>
+            <h2 className="text-4xl text-secondary mb-5 font-bold">Parcels Pending Pickup: {parcels.length}</h2>
             <div className="overflow-x-auto">
                 <table className="table table-zebra">
                     {/* head */}

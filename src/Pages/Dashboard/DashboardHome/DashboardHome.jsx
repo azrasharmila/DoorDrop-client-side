@@ -10,7 +10,7 @@ const DashboardHome = () => {
     if (roleLoading) {
         return <Loading></Loading>
     }
-   if (role === 'admin') {
+    if (role === 'admin') {
         return <AdminDashboardHome></AdminDashboardHome>
     }
     else if (role === 'rider') {
@@ -20,5 +20,6 @@ const DashboardHome = () => {
         return <UserDashboardHome></UserDashboardHome>
     }
 };
+
 
 export default DashboardHome;
