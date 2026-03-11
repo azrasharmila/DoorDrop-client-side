@@ -51,10 +51,12 @@ const AssignedDeliveries = () => {
                 });
             });
     };
+
+
     return (
         <div>
-            <h2 className="text-4xl text-secondary mb-5 font-bold">Parcels Pending Pickup: {parcels.length}</h2>
-            <div className="overflow-x-auto">
+            <h2 className="text-4xl  mb-8 font-semibold text-primary m-6 bg-secondary/10 p-5 rounded-4xl">Pending-Pickup : {parcels.length}</h2>
+            <div className="hidden md:block overflow-x-auto">
                 <table className="table table-zebra">
                     {/* head */}
                     <thead>
@@ -75,10 +77,11 @@ const AssignedDeliveries = () => {
                                 {
                                     parcel.deliveryStatus === 'driver_assigned'
                                         ? <>
-                                            <button
+                                            <button disabled={parcel.deliveryStatus !== 'driver_assigned'}
+
                                                 onClick={() => handleDeliveryStatusUpdate(parcel, 'rider_arriving')}
-                                                className='btn btn-primary text-black'>Accept</button>
-                                            <button className='btn btn-warning text-black ms-2'>Reject</button>
+                                                className='btn btn-secondary text-black disabled:opacity-50'>Accept</button>
+                                            <button onClick={() => handleDeliveryStatusUpdate(parcel, 'pending-pickup')} className='btn btn-warning text-black ms-2'>Reject</button>
                                         </>
                                         : <span>Accepted</span>
                                 }
@@ -88,12 +91,14 @@ const AssignedDeliveries = () => {
                             </td>
                             <td>
                                 <button
+                                    disabled={parcel.deliveryStatus !== 'rider_arriving'}
                                     onClick={() => handleDeliveryStatusUpdate(parcel, 'parcel_picked_up')}
-                                    className='btn btn-primary text-black'>Mark as Picked Up</button>
+                                    className='btn btn-primary text-black disabled:opacity-50'>Mark as Picked Up</button>
 
                                 <button
+                                    disabled={parcel.deliveryStatus !== 'parcel_picked_up'}
                                     onClick={() => handleDeliveryStatusUpdate(parcel, 'parcel_delivered')}
-                                    className='btn btn-primary text-black mx-2'>Mark as Delivered</button>
+                                    className='btn btn-secondary text-black mx-2 disabled:opacity-50'>Mark as Delivered</button>
                             </td>
                         </tr>)}
 
@@ -101,6 +106,78 @@ const AssignedDeliveries = () => {
                     </tbody>
                 </table>
             </div>
+
+            <div className="block md:hidden px-4">
+
+                {parcels.map((parcel, index) => (
+
+                    <div
+                        key={parcel._id}
+                        className="p-4 mb-4 shadow rounded-lg border border-gray-200"
+                    >
+
+                        <p>
+                            <span className="font-bold">Name:</span> {parcel.parcelName}
+                        </p>
+
+                        <p>
+                            <span className="font-bold">Status:</span> {parcel.deliveryStatus}
+                        </p>
+                        <div className="mt-2 flex flex-wrap gap-2">
+
+                            {parcel.deliveryStatus === 'driver_assigned'
+                                ?
+                                <>
+                                    <button
+                                        disabled={parcel.deliveryStatus !== 'driver_assigned'}
+                                        onClick={() => handleDeliveryStatusUpdate(parcel, 'rider_arriving')}
+                                        className='btn btn-sm btn-secondary text-black'
+                                    >
+                                        Accept
+                                    </button>
+
+                                    <button
+                                        onClick={() => handleDeliveryStatusUpdate(parcel, 'pending-pickup')}
+                                        className='btn btn-sm btn-warning text-black'
+                                    >
+                                        Reject
+                                    </button>
+                                </>
+                                :
+                                <span className="text-secondary font-semibold">Accepted</span>
+                            }
+
+                        </div>
+
+
+                        {/* Other actions */}
+                        <div className="mt-3 flex flex-wrap gap-2">
+
+                            <button
+                                disabled={parcel.deliveryStatus !== 'rider_arriving'}
+                                onClick={() => handleDeliveryStatusUpdate(parcel, 'parcel_picked_up')}
+                                className='btn btn-sm btn-primary text-black'
+                            >
+                                Picked Up
+                            </button>
+                            <button
+                                disabled={parcel.deliveryStatus !== 'parcel_picked_up'}
+                                onClick={() => handleDeliveryStatusUpdate(parcel, 'parcel_delivered')}
+                                className='btn btn-sm btn-secondary text-black'
+                            >
+                                Delivered
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                ))}
+
+            </div>
+
+
+
         </div >
     );
 };

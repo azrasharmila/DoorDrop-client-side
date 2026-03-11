@@ -137,7 +137,7 @@ const DashboardLayout = () => {
                                     </NavLink>
                                 </li>
 
-                                <li>
+                                <li className='mb-3'>
                                     <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Completed Deliveries" to="/dashboard/completed-deliveries">
                                         <SiGoogletasks className='text-primary' />
                                         <span className="is-drawer-close:hidden">Completed Deliveries</span>

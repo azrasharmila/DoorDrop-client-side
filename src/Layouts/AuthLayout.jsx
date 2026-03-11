@@ -5,14 +5,14 @@ import login from '../assets/others/login.png';
 
 const AuthLayout = () => {
     return (
-         <div className='max-w-7xl mx-auto'>
+         <div className='max-w-7xl mx-auto  px-4 sm:px-6 md:px-8'>
             <Logo></Logo>
-            <div className='flex items-center'>
-                <div className='flex-1'>
+            <div className='flex flex-col md:flex-row items-center gap-8 mt-6'>
+                <div className='flex-1 w-full'>
                     <Outlet></Outlet>
                 </div>
-                <div className='flex-1'>
-                    <img src={login} alt="" />
+                <div className='flex-1 hidden lg:flex justify-center'>
+                    <img src={login} alt="" className='max-w-md w-full' />
                 </div>
             </div>
         </div>

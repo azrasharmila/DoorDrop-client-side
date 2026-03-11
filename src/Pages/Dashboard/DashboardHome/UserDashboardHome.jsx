@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { PieChart, Pie, Tooltip, Legend } from 'recharts';
+import Loading from '../../../Components/Loading/Loading';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import { AuthContext } from '../../../Contexts/AuthContext';
 
@@ -23,7 +24,7 @@ const UserDashboardHome = () => {
   });
 
   if (loading || isLoading) {
-    return <div>Loading dashboard...</div>;
+    return <Loading></Loading>
   }
 
   // Parcel statistics
@@ -46,27 +47,27 @@ const UserDashboardHome = () => {
   return (
     <div className="p-6">
 
-      <h2 className="text-3xl font-bold  text-secondary mb-5">
+      <h2 className="text-3xl font-bold  text-secondary/80 mb-9">
         User Dashboard
       </h2>
 
-      {/* Stats cards */}
+     
 
-      <div className="grid grid-cols-3 gap-6 mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-10 md:mb-10">
 
-        <div className="bg-primary/20 shadow p-6 rounded-lg text-center">
+        <div className="bg-primary/20 shadow p-6 sm:p-6 rounded-lg text-center">
           <h3 className="text-lg font-semibold">Total Parcels</h3>
-          <p className="text-3xl font-bold mt-2">{total}</p>
+          <p className="text-2xl sm:text-3xl font-bold mt-2">{total}</p>
         </div>
 
-        <div className="bg-primary/20 shadow p-6 rounded-lg text-center">
+        <div className="bg-primary/20 shadow p-6 sm:p-6  rounded-lg text-center">
           <h3 className="text-lg font-semibold">Pending</h3>
-          <p className="text-3xl font-bold mt-2">{pending}</p>
+          <p className="text-2xl sm:text-3xl font-bold mt-2">{pending}</p>
         </div>
 
-        <div className="bg-primary/20 shadow p-6 rounded-lg text-center">
+        <div className="bg-primary/20 shadow p-6 sm:p-6  rounded-lg text-center">
           <h3 className="text-lg font-semibold">Delivered</h3>
-          <p className="text-3xl font-bold mt-2">{delivered}</p>
+          <p className="text-2xl sm:text-3xl font-bold mt-2">{delivered}</p>
         </div>
 
       </div>
@@ -103,7 +104,7 @@ const UserDashboardHome = () => {
 
         <div className="overflow-x-auto">
 
-          <table className="table w-full">
+          <table className="table w-full min-w-[500px] md:min-w-full">
 
             <thead>
               <tr>

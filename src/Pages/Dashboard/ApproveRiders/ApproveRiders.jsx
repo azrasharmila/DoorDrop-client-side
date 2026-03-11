@@ -140,7 +140,7 @@ const ApproveRiders = () => {
 
             </div>
 
-            
+
             <div className="hidden md:block overflow-x-auto w-full">
                 <table className="table table-zebra w-full min-w-[600px]">
                     {/* head */}
@@ -167,7 +167,9 @@ const ApproveRiders = () => {
                                 <td>
                                     <p className={`${rider.status === 'approved' ? 'text-secondary' : 'text-primary'}`}>{rider.status}</p>
                                 </td>
-                                <td>{rider.workStatus}</td>
+                                <td>
+                                    {rider.status === 'approved' ? rider.workStatus : ''}
+                                </td>
                                 <td>
 
 
@@ -213,19 +215,21 @@ const ApproveRiders = () => {
             </div>
 
 
-             <div className="block md:hidden">
+            <div className="block md:hidden">
                 {riders.map((rider, index) => (
                     <div key={index} className="p-4 mb-4 shadow rounded-lg border border-gray-200">
                         <p><span className="font-bold">Name:</span> {rider.name}</p>
                         <p><span className="font-bold">District:</span> {rider.district}</p>
                         <p><span className="font-bold">License:</span> {rider.license}</p>
                         <p>
-                            <span className="font-bold">Application Status:</span> 
+                            <span className="font-bold">Application Status:</span>
                             <span className={`${rider.status === 'approved' ? 'text-secondary' : 'text-primary'}`}>
                                 {rider.status}
                             </span>
-                            </p>
-                        <p><span className="font-bold">Work Status:</span> {rider.workStatus}</p>
+                        </p>
+                        <p>
+                            <span className="font-bold">Work Status:</span> {rider.status === 'approved' ? rider.workStatus : ''} 
+                        </p>
 
                         {/* Action Buttons */}
                         <div className="flex gap-2 mt-2">

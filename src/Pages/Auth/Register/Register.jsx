@@ -76,7 +76,7 @@ const Register = () => {
 
     return (
         <div className='card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl'>
-            <h3 className="text-3xl  text-center text-secondary">Welcome to DoorDrop</h3>
+            <h3 className="text-3xl  text-center text-secondary mt-5">Welcome to DoorDrop</h3>
             <p className='text-center text-primary'>Please Register</p>
 
             <form className="card-body" onSubmit={handleSubmit(handleRegister)}>

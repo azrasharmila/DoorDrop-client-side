@@ -28,8 +28,8 @@ const CompletedDeliveries = () => {
 
     return (
         <div>
-            <h2 className='text-4xl'>Completed Deliveries:{parcels.length} </h2>
-            <div className="overflow-x-auto">
+            <h2 className='text-3xl font-semibold text-secondary m-6 bg-secondary/10 p-5 rounded-4xl'>Completed Deliveries : {parcels.length} </h2>
+            <div className="hidden md:block overflow-x-auto">
                 <table className="table table-zebra">
                     {/* head */}
                     <thead>
@@ -40,7 +40,7 @@ const CompletedDeliveries = () => {
                             <th>Pickup District</th>
                             <th>Cost</th>
                             <th>Payout</th>
-                            <th>Action</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -53,16 +53,25 @@ const CompletedDeliveries = () => {
                             <td>{calculatePayout(parcel)}</td>
 
 
-                            <td>
-                                <button
-
-                                    className='btn btn-primary text-black'>Cash out</button>
-                            </td>
+                           
                         </tr>)}
 
                     </tbody>
                 </table>
             </div>
+
+            <div className="block md:hidden px-4">
+                {parcels.map((parcel, index) => (
+                    <div key={parcel._id} className="p-4 mb-4 shadow rounded-lg border border-gray-200">
+                        <p><span className="font-bold">#</span> {index + 1}</p>
+                        <p><span className="font-bold">Name:</span> {parcel.parcelName}</p>
+                        <p><span className="font-bold">Created At:</span> {parcel.createdAt}</p>
+                        <p><span className="font-bold">Pickup District:</span> {parcel.senderDistrict}</p>
+                        <p><span className="font-bold">Cost:</span> {parcel.cost}</p>
+                        <p><span className="font-bold">Payout:</span> {calculatePayout(parcel)}</p>
+                    </div>
+                ))}
+            </div> 
         </div>
     );
 }

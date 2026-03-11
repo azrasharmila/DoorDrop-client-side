@@ -30,9 +30,9 @@ const AdminDashboardHome = () => {
 
     return (
         <div>
-            <h2 className="text-4xl"></h2>
+            <h2 className="text-4xl mb-9 text-secondary/60 font-semibold bg-secondary/10 p-5 rounded-3xl">Admin Dashboard</h2>
 
-            <div className="stats shadow">
+            <div className="stats shadow ">
                 {
                     deliveryStats
                         .filter(stat => stat._id !== null)
@@ -60,7 +60,7 @@ const AdminDashboardHome = () => {
                 }
             </div>
 
-            <div className='w-full h-[400px]'>
+            <div className='w-full h-[400px] mt-4'>
                 <PieChart style={{ width: '100%', maxWidth: '500px', maxHeight: '80vh', aspectRatio: 2 }} responsive>
                     
                     <Pie

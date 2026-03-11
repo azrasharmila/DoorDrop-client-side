@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { PieChart, Pie, Tooltip, Legend,Cell} from 'recharts';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import { AuthContext } from '../../../Contexts/AuthContext';
+import Loading from '../../../Components/Loading/Loading';
 
 const RiderDashboardHome = () => {
 
@@ -26,7 +27,7 @@ const RiderDashboardHome = () => {
   });
 
   if (isLoading) {
-    return <div className="text-center text-xl mt-10">Loading dashboard...</div>;
+    return <Loading></Loading>
   }
 
   const pieData = [
@@ -38,7 +39,7 @@ const RiderDashboardHome = () => {
   return (
     <div className="p-6">
 
-      <h2 className="text-3xl font-bold mb-6">Rider Dashboard</h2>
+      <h2 className="text-3xl font-bold mb-9 text-secondary/80">Rider Dashboard</h2>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
