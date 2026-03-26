@@ -25,7 +25,7 @@ const Banner = () => {
 
             <div className="flex flex-wrap items-center gap-4 pt-4 ">
 
-              <div className="flex items-center">
+              <Link to="/dashboard/my-parcels" className="flex items-center">
                 <button className="btn btn-secondary rounded-full px-8 h-10 text-md font-bold border-none shadow-md">
                   Track Your Parcel
                 </button>
@@ -34,7 +34,7 @@ const Banner = () => {
                 <div className="bg-accent text-white h-10 w-10 lg:h-12 lg:w-12 rounded-full -ml-3 lg:-ml-5 flex-shrink-0 z-10 flex items-center justify-center shadow-lg cursor-pointer hover:bg-black transition-all">
                   <LuArrowUpRight size={24} strokeWidth={2} />
                 </div>
-              </div>
+              </Link>
 
 
               {/* <button className="btn btn-outline border-2 border-gray-200 rounded-2xl h-10 px-8 text-md font-bold hover:bg-gray-50 hover:text-black normal-case">
@@ -66,7 +66,7 @@ const Banner = () => {
 
             <div className="flex flex-wrap items-center gap-4 pt-4 ">
 
-              <div className="flex items-center">
+              <Link to="/dashboard/my-parcels" className="flex items-center">
                 <button className="btn btn-secondary rounded-full px-8 h-10 text-md font-bold border-none shadow-md">
                   Track Your Parcel
                 </button>
@@ -75,7 +75,7 @@ const Banner = () => {
                 <div className="bg-accent text-white h-10 w-10 lg:h-12 lg:w-12 rounded-full -ml-4 lg:-ml-5 flex-shrink-0 z-10 flex items-center justify-center shadow-lg cursor-pointer hover:bg-black transition-all">
                   <LuArrowUpRight size={24} strokeWidth={2} />
                 </div>
-              </div>
+              </Link>
 
 
               <Link
@@ -110,7 +110,7 @@ const Banner = () => {
 
             <div className="flex flex-wrap items-center gap-4 pt-4 ">
 
-              <div className="flex items-center">
+              <Link to="/dashboard/my-parcels" className="flex items-center">
                 <button className="btn btn-secondary rounded-full px-8 h-10 text-md font-bold border-none shadow-md">
                   Track Your Parcel
                 </button>
@@ -119,7 +119,7 @@ const Banner = () => {
                 <div className="bg-accent text-white h-10 w-10 lg:h-12 lg:w-12 rounded-full -ml-4 lg:-ml-5 flex-shrink-0 z-10 flex items-center justify-center shadow-lg cursor-pointer hover:bg-black transition-all">
                   <LuArrowUpRight size={24} strokeWidth={2} />
                 </div>
-              </div>
+              </Link>
 
 
               <Link

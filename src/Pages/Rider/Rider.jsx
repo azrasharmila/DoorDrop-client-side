@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import useAuth from '../../Hooks/useAuth';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
-import { useLoaderData } from 'react-router';
+import { useLoaderData, useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
 
 
@@ -15,6 +15,7 @@ const Rider = () => {
     } = useForm();
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
+    const navigate = useNavigate();
 
 
     const serviceCenters = useLoaderData();
@@ -30,31 +31,52 @@ const Rider = () => {
 
     const riderRegion = useWatch({ control, name: 'region' });
 
-    const handleRider = (data) => {
-        //console.log(data);
-        axiosSecure.post('/riders', data)
-            .then(res => {
-                if (res.data.insertedId) {
-                    console.log('rider data inserted');
-                    Swal.fire({
-                        position: "center",
-                        icon: "success",
-                        title: "Your application has been submitted. Please wait patiently",
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
+    const handleRider = async (data) => {
+        try {
 
-                }
-            })
+            const existing = await axiosSecure.get(`/riders?email=${user?.email}`);
+
+            if (existing.data?.length > 0) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "You have already applied as a rider!",
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => {
+                    navigate('/dashboard');
+                });
+                return;
+            }
+
+            const res = await axiosSecure.post('/riders', data)
+
+            if (res.data.insertedId) {
+                console.log('rider data inserted');
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Your application has been submitted. Please wait patiently",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(() => {
+                    navigate('/dashboard');
+                });
+
+            }
+        }
+
+        catch (error) {
+            console.error(error);
+        }
+
+    };
 
 
-
-    }
 
 
     return (
         <div>
-            <h2 className="text-4xl text-primary">Be a Rider</h2>
+            <h2 className="text-4xl font-semibold text-secondary/90  bg-primary/10 inline-block p-3 rounded-2xl">Be a Rider</h2>
             <form onSubmit={handleSubmit(handleRider)} className='mt-12 p-4 text-black'>
 
 

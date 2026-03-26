@@ -113,7 +113,7 @@ const Profile = () => {
                                         onChange={handleImageChange}
                                     />
 
-                                    <button type="submit" className='btn btn-primary rounded-2xl my-3'>Update Profile</button>
+                                    <button type="submit" className='btn btn-primary rounded-2xl my-3 ml-4'>Update Profile</button>
 
                                 </form>
                             </div>

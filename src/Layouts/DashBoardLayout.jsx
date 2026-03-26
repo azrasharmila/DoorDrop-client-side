@@ -2,7 +2,7 @@ import React from 'react';
 import { CiDeliveryTruck } from 'react-icons/ci';
 import { SiGoogletasks } from 'react-icons/si';
 import { FaRegCreditCard, FaUsers, FaTasks } from "react-icons/fa";
-import { MdAssignmentAdd, MdOutlineDirectionsBike } from 'react-icons/md';
+import { MdAssignmentAdd, MdOutlineDirectionsBike, MdOutlineHome } from 'react-icons/md';
 import { Link, NavLink, Outlet, useNavigate } from 'react-router';
 import useRole from '../Hooks/useRole';
 import { FaUser } from 'react-icons/fa6';
@@ -96,14 +96,13 @@ const DashboardLayout = () => {
                             </NavLink>
                         </li>
                         <li className='my-3'>
-                            <Link to="/dashboard" className={({ isActive }) =>
+                             <NavLink className={({ isActive }) =>
                                 `is-drawer-close:tooltip is-drawer-close:tooltip-right flex items-center gap-2
                                  ${isActive ? " text-secondary text-lg bg-accent/10" : ""}`
-                            } data-tip="Homepage">
-                                {/* Home icon */}
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor" className="my-1.5 inline-block size-4 text-primary "><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                            } data-tip="DashBoard " to="/dashboard">
+                                <MdOutlineHome className='text-primary' />
                                 <span className="is-drawer-close:hidden">Dashboard</span>
-                            </Link>
+                            </NavLink>
                         </li>
 
                         {/* our dashboard links */}
