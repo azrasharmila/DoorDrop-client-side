@@ -99,7 +99,7 @@ const DashboardLayout = () => {
                              <NavLink className={({ isActive }) =>
                                 `is-drawer-close:tooltip is-drawer-close:tooltip-right flex items-center gap-2
                                  ${isActive ? " text-secondary text-lg bg-accent/10" : ""}`
-                            } data-tip="DashBoard " to="/dashboard">
+                            } data-tip="DashBoard " to="/dashboard" end>
                                 <MdOutlineHome className='text-primary' />
                                 <span className="is-drawer-close:hidden">Dashboard</span>
                             </NavLink>

@@ -43,7 +43,7 @@ const Companies = () => {
         We've worked with hundreds of sales teams across various industries.
       </h2>
 
-      {/* ONE marquee only */}
+
       <marquee
         direction="left"
         scrollamount="6"
