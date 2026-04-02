@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import useAuth from '../../../Hooks/useAuth';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router';
 
 const AssignedDeliveries = () => {
     const { user } = useAuth();
     const [otpInputs, setOtpInputs] = useState({});
+    const navigate = useNavigate();
     const axiosSecure = useAxiosSecure();
     const { data: parcels = [], refetch } = useQuery({
         queryKey: ['parcels', user.email, 'driver_assigned'],
@@ -18,7 +20,7 @@ const AssignedDeliveries = () => {
 
     })
 
-     const handleOtpChange = (id, value) => {
+    const handleOtpChange = (id, value) => {
         setOtpInputs(prev => ({
             ...prev,
             [id]: value
@@ -46,8 +48,13 @@ const AssignedDeliveries = () => {
 
                 Swal.fire({
                     icon: "success",
-                    title: "Delivery Confirmed "
+                    title: "Delivery Confirmed ",
+                    timer: 1500,
+                    showConfirmButton: false
                 });
+                setTimeout(() => {
+                    navigate('/dashboard/completed-deliveries');
+                }, 1500);
             } else {
                 Swal.fire("Wrong OTP.", " Please check and try again. ", "error");
             }
@@ -79,8 +86,9 @@ const AssignedDeliveries = () => {
                         icon: "success",
                         title: message,
                         showConfirmButton: false,
-                        timer: 1500
+                        timer: 2500
                     });
+
                 }
             })
             .catch(err => {
@@ -106,10 +114,10 @@ const AssignedDeliveries = () => {
                             <th>Name</th>
 
                             <th>Confirm</th>
-                            <th>Actions</th>
+                            <th>Action</th>
                             <th>OTP</th>
-                            <th>Verify</th>
-                            <th>Status</th>
+                            <th>Verification</th>
+                            <th>Delivery Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -145,11 +153,11 @@ const AssignedDeliveries = () => {
                                     className='btn btn-secondary text-black mx-2 disabled:opacity-50'>Mark as Delivered</button> */}
                             </td>
 
-                             <td>
+                            <td>
                                 <input
                                     type="text"
                                     placeholder="Enter OTP"
-                                    className="input input-sm w-24"
+                                    className="input input-sm w-24 p-3"
                                     value={otpInputs[parcel._id] || ""}
                                     onChange={(e) => handleOtpChange(parcel._id, e.target.value)}
                                 />
@@ -166,9 +174,9 @@ const AssignedDeliveries = () => {
 
                             <td>
                                 {parcel.otpVerified ? (
-                                    <span className="text-green-500 font-bold">Delivered</span>
+                                    <span className="text-green-700 font-bold">Delivered</span>
                                 ) : (
-                                    <span className="text-gray-400">Pending</span>
+                                    <span className="text-red-400/80">Pending</span>
                                 )}
                             </td>
                         </tr>)}
