@@ -26,6 +26,7 @@ import CompletedDeliveries from "../Pages/Dashboard/CompletedDeliveries/Complete
 import ParcelTrack from "../Pages/ParcelTrack/ParcelTrack";
 import DashboardHome from "../Pages/Dashboard/DashboardHome/DashboardHome";
 import ErrorPage from "../Components/ErrorPage/ErrorPage";
+import ReceivedParcels from "../Pages/Dashboard/ReceivedParcel/ReceivedParcel";
 
 
 
@@ -101,6 +102,10 @@ export const router = createBrowserRouter([
       {
         path: 'my-parcels',
         Component: MyParcels
+      },
+       {
+        path: 'received-parcels',
+        Component: ReceivedParcels
       },
       {
         path: 'payment/:parcelId',

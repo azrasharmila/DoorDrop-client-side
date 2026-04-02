@@ -246,7 +246,7 @@ const MyParcels = () => {
                             <p><span className="font-bold">Name:</span> {parcel.parcelName}</p>
                             <p><span className="font-bold">Cost:</span> {parcel.cost}</p>
                             <p className='font-bold'>Tracking ID :</p>
-                            <Link to={`/parcel-track/${parcel.trackingId}`}>{parcel.trackingId}</Link>
+                            <Link  to={`/parcel-track/${parcel.trackingId}`}>{parcel.trackingId}</Link>
                             <Link to={`/parcel-track/${parcel.trackingId}`}>{parcel.trackingId}</Link>
                             
                             <p><span className="font-bold">Delivery Status:</span> {parcel.deliveryStatus}</p>

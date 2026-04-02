@@ -10,6 +10,7 @@ import { TbLogout } from "react-icons/tb";
 import useAuth from '../Hooks/useAuth';
 import Swal from 'sweetalert2';
 import { LuMapPinHouse } from "react-icons/lu";
+import { BsFillBoxSeamFill } from "react-icons/bs";
 const DashboardLayout = () => {
     const { role } = useRole();
     const { user, logOut } = useAuth();
@@ -122,6 +123,15 @@ const DashboardLayout = () => {
                             } data-tip="Payment History " to="/dashboard/payment-history">
                                 <FaRegCreditCard className='text-primary' />
                                 <span className="is-drawer-close:hidden">Payment History</span>
+                            </NavLink>
+                        </li>
+                        <li className='mb-3'>
+                            <NavLink className={({ isActive }) =>
+                                `is-drawer-close:tooltip is-drawer-close:tooltip-right flex items-center gap-2
+                                 ${isActive ? " text-secondary text-lg bg-accent/10" : ""}`
+                            } data-tip="Received Parcels " to="/dashboard/received-parcels">
+                                <BsFillBoxSeamFill className='text-primary' />
+                                <span className="is-drawer-close:hidden">Received Parcels</span>
                             </NavLink>
                         </li>
                         {

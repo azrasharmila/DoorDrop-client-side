@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useState } from 'react';
 import useAuth from '../../../Hooks/useAuth';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
 
 const AssignedDeliveries = () => {
     const { user } = useAuth();
+    const [otpInputs, setOtpInputs] = useState({});
     const axiosSecure = useAxiosSecure();
     const { data: parcels = [], refetch } = useQuery({
         queryKey: ['parcels', user.email, 'driver_assigned'],
@@ -16,6 +17,46 @@ const AssignedDeliveries = () => {
         }
 
     })
+
+     const handleOtpChange = (id, value) => {
+        setOtpInputs(prev => ({
+            ...prev,
+            [id]: value
+        }));
+    };
+
+    const handleVerifyOtp = async (parcel) => {
+        const enteredOtp = otpInputs[parcel._id];
+
+        if (!enteredOtp) {
+            return Swal.fire("Error", "Enter OTP first", "error");
+        }
+
+        try {
+            const res = await axiosSecure.patch(
+                `/parcels/${parcel._id}/verify-otp`,
+                {
+                    otp: enteredOtp,
+                    trackingId: parcel.trackingId
+                }
+            );
+
+            if (res.data.success) {
+                refetch();
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Delivery Confirmed "
+                });
+            } else {
+                Swal.fire("Wrong OTP.", " Please check and try again. ", "error");
+            }
+
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const handleDeliveryStatusUpdate = (parcel, status) => {
         console.log('Clicked parcel:', parcel);
         console.log('Parcel ID:', parcel._id);
@@ -65,7 +106,10 @@ const AssignedDeliveries = () => {
                             <th>Name</th>
 
                             <th>Confirm</th>
-                            <th>Other Actions</th>
+                            <th>Actions</th>
+                            <th>OTP</th>
+                            <th>Verify</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -95,10 +139,37 @@ const AssignedDeliveries = () => {
                                     onClick={() => handleDeliveryStatusUpdate(parcel, 'parcel_picked_up')}
                                     className='btn btn-primary text-black disabled:opacity-50'>Mark as Picked Up</button>
 
-                                <button
+                                {/* <button
                                     disabled={parcel.deliveryStatus !== 'parcel_picked_up'}
                                     onClick={() => handleDeliveryStatusUpdate(parcel, 'parcel_delivered')}
-                                    className='btn btn-secondary text-black mx-2 disabled:opacity-50'>Mark as Delivered</button>
+                                    className='btn btn-secondary text-black mx-2 disabled:opacity-50'>Mark as Delivered</button> */}
+                            </td>
+
+                             <td>
+                                <input
+                                    type="text"
+                                    placeholder="Enter OTP"
+                                    className="input input-sm w-24"
+                                    value={otpInputs[parcel._id] || ""}
+                                    onChange={(e) => handleOtpChange(parcel._id, e.target.value)}
+                                />
+                            </td>
+
+                            <td>
+                                <button
+                                    onClick={() => handleVerifyOtp(parcel)}
+                                    className="btn btn-success btn-sm text-black"
+                                >
+                                    Verify
+                                </button>
+                            </td>
+
+                            <td>
+                                {parcel.otpVerified ? (
+                                    <span className="text-green-500 font-bold">Delivered</span>
+                                ) : (
+                                    <span className="text-gray-400">Pending</span>
+                                )}
                             </td>
                         </tr>)}
 
