@@ -82,7 +82,7 @@ const AssignedDeliveries = () => {
                 if (res.data.modifiedCount) {
                     refetch();
                     Swal.fire({
-                        position: "top-end",
+                        position: "center",
                         icon: "success",
                         title: message,
                         showConfirmButton: false,

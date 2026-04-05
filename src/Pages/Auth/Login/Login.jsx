@@ -1,16 +1,18 @@
-import React from 'react';
+//import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../../Hooks/useAuth';
-//import { Link, useLocation, useNavigate } from 'react-router';
 import Social from '../Social/Social';
 import { Link, useLocation, useNavigate } from 'react-router';
+import { auth } from '../../../Firebase/firebase.init';
+import toast from 'react-hot-toast';
 
 
 const Login = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
-    const { signInUser } = useAuth();
+    const { register, handleSubmit, formState: { errors }, getValues } = useForm();
+    const { signInUser, resetPassword } = useAuth();
     const location = useLocation();
     // console.log('location', location);
+
 
     const navigate = useNavigate();
 
@@ -27,10 +29,30 @@ const Login = () => {
             })
     }
 
+    const handleForgetPassword = () => {
+        //console.log('forgot',emailRef.current);
+        const email = getValues('email');
+        // console.log('forgot pass', email);
+        if (!email) {
+            toast.error('Please enter your email first');
+            return;
+        }
+
+        resetPassword(email)
+            .then(() => {
+                toast('Please check your email spam folder')
+            })
+            .catch(error => {
+                console.log(error);
+                toast.error(error.message);
+
+            })
+    }
+
     return (
-                
-      
-         <div className="card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl">
+
+
+        <div className="card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl">
             <h3 className="text-3xl md:text-3xl text-center mt-5 text-secondary">Welcome back</h3>
             <p className='text-center text-sm md:text-base text-primary'>Please Login</p>
             <form className="card-body" onSubmit={handleSubmit(handleLogin)}>
@@ -50,7 +72,7 @@ const Login = () => {
                     }
 
 
-                    <div><a className="link link-hover">Forgot password?</a></div>
+                    <div onClick={handleForgetPassword}><a className="link link-hover">Forgot password?</a></div>
                     <button className="btn btn-neutral mt-4 w-full">Login</button>
                 </fieldset>
                 <p className='mt-2'>New to DoorDrop?  <Link
@@ -60,8 +82,8 @@ const Login = () => {
             </form>
             <Social></Social>
         </div>
-         
-         
+
+
     );
 };
 

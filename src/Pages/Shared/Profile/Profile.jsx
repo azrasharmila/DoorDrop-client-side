@@ -5,11 +5,12 @@ import useRole from '../../../Hooks/useRole';
 import Swal from 'sweetalert2';
 
 const Profile = () => {
-    const { user, updateUserProfile } = useAuth()
+    const { user, updateUserProfile, resetPassword } = useAuth()
     const { role } = useRole();
 
     const [name, setName] = useState(user?.displayName || '');
     const [imageFile, setImageFile] = useState(null);
+    const [email, setEmail] = useState(user?.email || '');
     const image_hosting_key = import.meta.env.VITE_image_host_key;
 
     const handleUpdateProfile = async (e) => {
@@ -18,13 +19,13 @@ const Profile = () => {
         try {
             let photoURL = user?.photoURL;
 
-            
+
             if (imageFile) {
                 const formData = new FormData();
                 formData.append("image", imageFile);
 
                 const res = await fetch(
-                   `https://api.imgbb.com/1/upload?key=${image_hosting_key}`,
+                    `https://api.imgbb.com/1/upload?key=${image_hosting_key}`,
                     {
                         method: "POST",
                         body: formData,
@@ -59,10 +60,36 @@ const Profile = () => {
         setImageFile(e.target.files[0]);
     };
 
+    const handleResetPassword = async () => {
+        if (!email) {
+            return Swal.fire({
+                icon: "error",
+                title: "Please enter your email",
+            });
+        }
+
+        try {
+            await resetPassword(email);
+
+            Swal.fire({
+                icon: "success",
+                title: "Password Reset Email Sent!",
+                text: "Check your email inbox.",
+            });
+
+        } catch (error) {
+            console.log(error);
+            Swal.fire({
+                icon: "error",
+                title: "Failed to send reset email",
+            });
+        }
+    };
+
 
     return (
         <div className='flex justify-center items-center h-screen'>
-            <div className='bg-white shadow-lg rounded-2xl md:w-4/5 lg:w-3/5'>
+            <div className='bg-white shadow-lg  rounded-2xl md:w-4/5 lg:w-3/5'>
                 <img
                     alt='cover photo'
                     src={coverImg}
@@ -84,24 +111,46 @@ const Profile = () => {
                         User Id: {user?.uid}
                     </p>
                     <div className='w-full p-2 mt-4 rounded-lg'>
-                        <div className='flex flex-wrap items-center justify-between text-sm text-accent '>
-                            <p className='flex flex-col'>
+                        <div className='flex flex-wrap items-center justify-between text-sm text-accent  '>
+                            {/* <p className='flex flex-col'>
                                 Name
                                 <span className='font-bold text-accent '>
                                     {user?.displayName}
                                 </span>
-                            </p>
+                            </p> */}
                             <p className='flex flex-col'>
                                 Email
                                 <span className='font-bold text-gray-600 '>{user?.email}</span>
                             </p>
 
+                            <div className=' pt-4 mt-4'>
+                                <h3 className='font-semibold mb-2'>Reset Password</h3>
+
+                                <div className='flex flex-wrap gap-3 items-center'>
+                                    <input
+                                        type="email"
+                                        className='input input-bordered'
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        placeholder="Enter your email"
+                                    />
+
+                                    <button
+                                        onClick={handleResetPassword}
+                                        className='btn  rounded-xl'
+                                    >
+                                        Reset Password
+                                    </button>
+                                </div>
+                            </div>
+
+
                             <div>
 
-                               
+
                                 <form onSubmit={handleUpdateProfile} className='my-4'>
 
-                                    <input 
+                                    <input
                                         type="text" className='btn mr-6'
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}

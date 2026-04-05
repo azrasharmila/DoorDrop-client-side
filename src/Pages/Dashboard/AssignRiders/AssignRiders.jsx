@@ -65,7 +65,7 @@ const AssignRiders = () => {
             queryClient.invalidateQueries(['riders', selectedParcel?.senderDistrict, 'available']);
 
             Swal.fire({
-                position: "top-end",
+                position: "center",
                 icon: "success",
                 title: "Rider has been assigned.",
                 showConfirmButton: false,

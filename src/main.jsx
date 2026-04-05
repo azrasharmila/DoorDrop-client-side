@@ -15,7 +15,7 @@ createRoot(document.getElementById('root')).render(
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <Toaster
-          position="top-right"
+          position="top-center"
           toastOptions={{
             duration: 3000,
             className: "bg-primary text-primary-content",
